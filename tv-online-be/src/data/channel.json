@@ -1,0 +1,312 @@
+{
+    "channels": [
+        {
+            "id": "eb06fce0-3cea-40df-9c74-1b1a0142eb0a",
+            "name": "3HD",
+            "image": "CH3HD",
+            "imagePath": "internal",
+            "url": "http://appdootv2.dootvde.com:1935/live/50001_ch3.stream.smil/playlist.m3u8"
+        },
+        {
+            "id": "78572f31-f406-4cab-b672-29183b0e07e2",
+            "name": "ch5",
+            "image": "CH5",
+            "imagePath": "internal",
+            "url": "http://appdootv2.dootvde.com:1935/live/50002_ch5.stream.smil/playlist.m3u8"
+        },
+        {
+            "id": "cd749587-3c32-4004-936c-98325a07ac0e",
+            "name": "ch7",
+            "image": "CH7",
+            "imagePath": "internal",
+            "url": "http://appdootv2.dootvde.com:1935/live/50003_ch7.stream.smil/playlist.m3u8"
+        },
+        {
+            "id": "bec47f66-20de-4ae0-a341-ed60aabf6a3c",
+            "name": "9mcot",
+            "image": "CH9",
+            "imagePath": "internal",
+            "url": "http://appdootv2.dootvde.com:1935/live/50004_ch9.stream.smil/playlist.m3u8"
+        },
+        {
+            "id": "c43de5fb-75ec-4a09-8425-53ce7e7f3180",
+            "name": "nbt",
+            "image": "NBTENG",
+            "imagePath": "internal",
+            "url": "http://appdootv2.dootvde.com:1935/live/50005_nbt.stream.smil/playlist.m3u8"
+        },
+        {
+            "id": "78a3fc4e-87b3-494d-9f48-452074ec2154",
+            "name": "tpbs",
+            "image": "TPBS",
+            "imagePath": "internal",
+            "url": "http://appdootv2.dootvde.com:1935/live/50006_tpbs_hd.stream.smil/playlist.m3u8"
+        },
+        {
+            "id": "87383f8d-15d0-4ca7-8d57-4cb9c4211d44",
+            "name": "nation",
+            "image": "NATIONTV",
+            "imagePath": "internal",
+            "url": "http://appdootv2.dootvde.com:1935/live/50015_nation.stream.smil/playlist.m3u8"
+        },
+        {
+            "id": "1df6e573-29f6-4835-a971-b6aec8cbac3a",
+            "name": "workpoint",
+            "image": "WORKPOINT",
+            "imagePath": "internal",
+            "url": "http://appdootv2.dootvde.com:1935/live/50016_workpoint_tv.stream.smil/playlist.m3u8"
+        },
+        {
+            "id": "06ea827f-88f7-4c8c-8051-e273acde5c71",
+            "name": "true_4u",
+            "image": "TRUE4U",
+            "imagePath": "internal",
+            "url": "http://appdootv2.dootvde.com:1935/live/50017_true_4u.stream.smil/playlist.m3u8"
+        },
+        {
+            "id": "442a0a95-e6d6-4cac-8b21-66f9d68e393c",
+            "name": "gmm",
+            "image": "GMM",
+            "imagePath": "internal",
+            "url": "http://appdootv2.dootvde.com:1935/live/50018_gmm.stream.smil/playlist.m3u8"
+        },
+        {
+            "id": "9c06d3db-46bf-468e-8c58-bedee4e4170d",
+            "name": "mono_tv",
+            "image": "MONO",
+            "imagePath": "internal",
+            "url": "http://appdootv2.dootvde.com:1935/live/50021_mono_tv.stream.smil/playlist.m3u8"
+        },
+        {
+            "id": "b88bd886-db19-476f-9a3e-c602a4a12522",
+            "name": "one_hd",
+            "image": "ONE",
+            "imagePath": "internal",
+            "url": "http://appdootv2.dootvde.com:1935/live/50022_one_hd.stream.smil/playlist.m3u8"
+        },
+        {
+            "id": "f03b6173-080d-4953-8fb4-c06ea10a1b90",
+            "name": "thairath_hd",
+            "image": "THAIRATH",
+            "imagePath": "internal",
+            "url": "http://appdootv2.dootvde.com:1935/live/50023_thairath_hd.stream.smil/playlist.m3u8"
+        },
+        {
+            "id": "3a8c19ed-72e9-4665-8a5d-ec72fdf47a3c",
+            "name": "amarin_tv",
+            "image": "AMARIN",
+            "imagePath": "internal",
+            "url": "http://appdootv2.dootvde.com:1935/live/50025_amarin_tv_hd.stream.smil/playlist.m3u8"
+        },
+        {
+            "id": "7ca657ff-f7c1-47e2-9f75-163a4a0a61d9",
+            "name": "pptv_hd",
+            "image": "PPTV",
+            "imagePath": "internal",
+            "url": "http://appdootv2.dootvde.com:1935/live/50026_pptv_hd.stream.smil/playlist.m3u8"
+        },
+        {
+            "id": "416073a8-bbe1-469a-b651-b8fd82571f9f",
+            "name": "ch8",
+            "image": "CH8",
+            "imagePath": "internal",
+            "url": "http://appdootv2.dootvde.com:1935/live/50028_ch8.stream.smil/playlist.m3u8"
+        },
+        {
+            "id": "5d0913dd-3c85-4208-acd8-a919e6dc6835",
+            "name": "tptv",
+            "image": "THAI_PARLIAMENT_TV_LOGO",
+            "imagePath": "external",
+            "url": "http://appdootv2.dootvde.com:1935/live/50029_tptv.stream.smil/playlist.m3u8"
+        },
+        {
+            "id": "9808747d-82dd-4fae-93c3-403ddde0f8ed",
+            "name": "altv",
+            "image": "ALTV",
+            "imagePath": "external",
+            "url": "https://thaipbs-ujxrch.cdn.byteark.com/live/playlist.m3u8"
+        },
+        {
+            "id": "c014bd43-ff73-4bd5-bf09-38143536e6bb",
+            "name": "tnn",
+            "image": "TNN16",
+            "imagePath": "external",
+            "url": "http://freelive2.inwstream.com:1935/freelive-edge/tnn24/playlist.m3u8"
+        },
+        {
+            "id": "8878a4e8-527f-4869-a236-d20c9154ffac",
+            "name": "ฟ้าวันใหม่",
+            "image": "BLUESKY",
+            "imagePath": "external",
+            "url": "https://5ca295a97d887.streamlock.net/blueskychannel/blueskychannel/playlist.m3u8"
+        },
+        {
+            "id": "31adb005-a467-4c02-a430-12c67de3538a",
+            "name": "mvtv five",
+            "image": "MVTV",
+            "imagePath": "external",
+            "url": "https://edge6a.v2h-cdn.com/appt4/MVTV75.stream_720p/chunklist_w1971781525.m3u8"
+        },
+        {
+            "id": "f704c47f-014c-44f2-82fe-7a74853f929e",
+            "name": "v2h2",
+            "image": "V2H2",
+            "imagePath": "external",
+            "url": "https://edge6a.v2h-cdn.com/appt3/WOWSH.stream_720p/chunklist_w2047011481.m3u8"
+        },
+        {
+            "id": "557a1e34-5094-40da-81ed-4bfa7672d98e",
+            "name": "บันเทิงเกิน 100",
+            "image": "LOGO66",
+            "imagePath": "external",
+            "url": "https://edge6a.v2h-cdn.com/appt7/BANTERG.stream_720p/chunklist_w1541734923.m3u8"
+        },
+        {
+            "id": "a55220ce-a198-405d-843f-105da87b6659",
+            "name": "ไทบ้าน tv",
+            "image": "THAIBAAN",
+            "imagePath": "external",
+            "url": "https://edge6a.v2h-cdn.com/appt3/Thaiban.stream_360p/chunklist_w792314604.m3u8"
+        },
+        {
+            "id": "74fe539f-bc65-4263-9556-3cd9df130606",
+            "name": "69tv",
+            "image": "TV69",
+            "imagePath": "external",
+            "url": "https://edge6a.v2h-cdn.com/appt7/MediaOnline.stream_360p/chunklist_w111026301.m3u8"
+        },
+        {
+            "id": "34d13f72-f3c9-4667-9f96-52827445f71a",
+            "name": "happy tv",
+            "image": "HAPPY",
+            "imagePath": "external",
+            "url": "https://edge6a.v2h-cdn.com/appt3/Happy.stream_360p/chunklist_w232512250.m3u8"
+        },
+        {
+            "id": "00cfd582-440d-48cd-bccd-14dac0f18e48",
+            "name": "Thai Variety",
+            "image": "TVARIETY",
+            "imagePath": "external",
+            "url": "https://edge6a.v2h-cdn.com/v2h/V2H11.stream_360p/chunklist_w143011904.m3u8"
+        },
+        {
+            "id": "06a3bcd9-bd99-41d8-b098-f5a4984fdf96",
+            "name": "สยาม",
+            "image": "SIAM",
+            "imagePath": "external",
+            "url": "https://edge6a.v2h-cdn.com/v2h/V2H12.stream_360p/chunklist_w1845001940.m3u8"
+        },
+        {
+            "id": "d06d047d-1232-4325-be6b-1c85d1013c8d",
+            "name": "ลิโด้",
+            "image": "LIDO",
+            "imagePath": "external",
+            "url": "https://edge6a.v2h-cdn.com/v2h/V2H13.stream_360p/chunklist_w2047639318.m3u8"
+        },
+        {
+            "id": "2471661f-6751-463d-b40d-5ac50e3595b1",
+            "name": "สกาล่า",
+            "image": "SCALA",
+            "imagePath": "external",
+            "url": "https://edge6a.v2h-cdn.com/v2h/V2H14.stream_360p/chunklist_w692878303.m3u8"
+        },
+        {
+            "id": "c1fc21d8-c01f-42a4-b0dc-8d490be5385c",
+            "name": "ราม่า",
+            "image": "RAMA",
+            "imagePath": "external",
+            "url": "https://edge6a.v2h-cdn.com/v2h/V2H15.stream_360p/chunklist_w845322086.m3u8"
+        },
+        {
+            "id": "34ac1f83-0ecc-4a3d-bc6e-11d11a46adc1",
+            "name": "Boomerang",
+            "image": "BOOMERANG",
+            "imagePath": "external",
+            "url": "https://cdn6.goprimetime.info/feed/202105171329/chboomberang/tracks-v1a1/mono.m3u8"
+        },
+        {
+            "id": "35e7f76b-6c6a-4c2d-9b1d-5956b8cd8ea5",
+            "name": "Cartoon Club",
+            "image": "CARTOONCLUB",
+            "imagePath": "external",
+            "url": "http://edge4-bkk.3bb.co.th:1935/CartoonClub_Livestream/cartoonclub_480P.stream/media_w255702590.m3u8"
+        },
+        {
+            "id": "15c6aeab-37c7-40f5-bb0a-8526371750f3",
+            "name": "Sabaidee TV",
+            "image": "SABAIDEE",
+            "imagePath": "external",
+            "url": "http://stream.rs.co.th/sbd-hi/index.m3u8"
+        },
+        {
+            "id": "457961d3-ffcc-4bbb-8e5c-0b9c758b7cc8",
+            "name": "Topnews",
+            "image": "TOPNEWS",
+            "imagePath": "external",
+            "url": "https://stream-01.sg1.dailymotion.com/sec(mOyh5XasEoxB2izGnZ4Ls3c6rL2H5U6iWF_K4UkzdE5N3ZaIwMN0N6NMuw3E5l2d)/dm/3/x8aopdx/s/live-4.m3u8"
+        },
+        {
+            "id": "0d2dffe9-aa0d-4fdb-8f67-286e53ebd98a",
+            "name": "สำรวจโลก",
+            "image": "SAMRULOK",
+            "imagePath": "external",
+            "url": "http://203.159.95.172:8081/live/explore/playlist.m3u8"
+        },
+        {
+            "id": "9c77372a-e59e-4761-9c70-c87a2bddcb2d",
+            "name": "Box Film",
+            "image": "eaf1ffcbc2c593c16171d5fb3bf49394",
+            "imagePath": "upload",
+            "url": "http://61.19.242.134/feed/202105171329/LC52/index.m3u8"
+        },
+        {
+            "id": "5762586d-8293-4415-b4e0-321f258f7234",
+            "name": "ZEEหนัง",
+            "image": "44ce0ab7bd026f7009880cbaa5cf6f37",
+            "imagePath": "upload",
+            "url": "https://freelive.inwstream.com:1936/freelive-edge/zeenang/playlist.m3u8"
+        },
+        {
+            "id": "322be3e8-bc98-47b6-850d-943d8ca0bd97",
+            "name": "TVB",
+            "image": "99e9eaff8c0d898e14e7ed533c849bf4",
+            "imagePath": "upload",
+            "url": "https://edge6a.v2h-cdn.com/RE_HD/smil:TVB_HD_ABR.smil/playlist.m3u8"
+        },
+        {
+            "id": "c566e601-e0de-4943-bddf-5931b7a0557e",
+            "name": "Mix Major Channel",
+            "image": "dae4c4ebe51c26a3c6f42c630c8a89da",
+            "imagePath": "upload",
+            "url": "https://edge6a.v2h-cdn.com/appt7/Mix_major.stream_720p/playlist.m3u8"
+        },
+        {
+            "id": "59dc0827-92b2-47be-b60d-ddd17bde8294",
+            "name": "True4U",
+            "image": "94018d5db2387913b1b9e7317520400a",
+            "imagePath": "upload",
+            "url": "https://freelive.inwstream.com:1936/freelive-edge/true4u/playlist.m3u8"
+        },
+        {
+            "id": "5be82edd-38b9-4607-92f4-e002c8b8bff2",
+            "name": "สาระดี",
+            "image": "22559ef6891569025259a1b52d655ce8",
+            "imagePath": "upload",
+            "url": "https://61022bdc19cd4.streamlock.net/edgelivepsi/PSIHD.stream_720p/chunklist.m3u8"
+        },
+        {
+            "id": "d27c844d-71fb-4fca-8c24-dd9c60d9162e",
+            "name": "TOONEE",
+            "image": "b8ba4eb28648feb91c6da54470a39d58",
+            "imagePath": "upload",
+            "url": "https://stream-03.sg1.dailymotion.com/sec(8lOMYwOWJB0kD-8STcdDUK8O8cft-HGN6rTWGNMuzv4)/dm/3/x7yxv78/s/live-1.m3u8"
+        },
+        {
+            "id": "724419f1-1e1a-441d-af51-aba5642f11b0",
+            "name": "Channel8",
+            "image": "ebc38161a01933f5e571345df403588d",
+            "imagePath": "upload",
+            "url": "http://54c241893bf39.streamlock.net:1935/ch8/ch8/chunklist.m3u8"
+        }
+    ]
+}

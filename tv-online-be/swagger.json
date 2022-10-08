@@ -1,0 +1,420 @@
+{
+    "openapi": "3.0.n",
+    "paths": {
+        "/api/v1/channel": {
+            "get": {
+                "tags": [
+                    "Channel"
+                ],
+                "summary": "Get all channels",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Channel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/channel/suggest": {
+            "get": {
+                "tags": [
+                    "Channel"
+                ],
+                "summary": "Get all suggest channels",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Channel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/channel/{id}": {
+            "get": {
+                "tags": [
+                    "Channel"
+                ],
+                "summary": "Get channel by id",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Channel"
+                        }
+                    },
+                    "404": {
+                        "description": "channel not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/upload": {
+            "post": {
+                "tags": [
+                    "Image"
+                ],
+                "summary": "Upload image",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "parameters": [
+                    {
+                        "name": "image",
+                        "in": "formData",
+                        "type": "file",
+                        "description": "The file to upload."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Channel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/image/{filename}": {
+            "get": {
+                "tags": [
+                    "Image"
+                ],
+                "summary": "Get image",
+                "parameters": [
+                    {
+                        "required": true,
+                        "name": "filename",
+                        "in": "path",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Channel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/login": {
+            "post": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Login admin account",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "login success"
+                    },
+                    "400": {
+                        "description": "username or password incorrect",
+                        "schema": {
+                            "$ref": "#/definitions/Users"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/register": {
+            "post": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Create admin account",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "login success"
+                    },
+                    "400": {
+                        "description": "username or password incorrect",
+                        "schema": {
+                            "$ref": "#/definitions/Users"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/channel": {
+            "post": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Admin create channel",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Channel"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Channel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/channel/admin/channel/{id}": {
+            "patch": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Admin update channel by id",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Channel"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Channel"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Admin update channel by id",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/channel/log/channel/{channelID}": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Get channel log by channel id",
+                "parameters": [
+                    {
+                        "name": "channelID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "channel not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/channel/log/user/{uid}": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Get user log by user id",
+                "parameters": [
+                    {
+                        "name": "uid",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "user not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/channel/chat/{channelID}": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Get channel chats by channel id",
+                "parameters": [
+                    {
+                        "name": "channelID",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "channel not found"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Channel": {
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "uniqueItems": true
+                },
+                "title": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "views": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "User": {
+            "required": [
+                "name",
+                "_id",
+                "companies"
+            ],
+            "properties": {
+                "_id": {
+                    "type": "integer",
+                    "uniqueItems": true
+                },
+                "isPublic": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "books": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "amount": {
+                                "type": "number"
+                            }
+                        }
+                    }
+                },
+                "companies": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "Users": {
+            "type": "array",
+            "$ref": "#/definitions/User"
+        }
+    }
+}
