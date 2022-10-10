@@ -25,3 +25,19 @@ export interface IChannelChat {
     channelID: string
     createdAt: string
 }
+
+export interface IHotChannel {
+    channel: IChannel
+    users: string[]
+}
+
+export interface IUser {
+    id: string
+    username: string
+    role: EUserRole
+}
+
+export enum EUserRole {
+    ADMIN = "ADMIN",
+    USER = "USER",
+}

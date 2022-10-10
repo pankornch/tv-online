@@ -5,8 +5,6 @@ function useCooldown(
 ): [number, (value: number, ms: number) => void] {
     const [count, setCount] = React.useState<number>(0)
 
-    const timerRef = React.useRef<NodeJS.Timer>()
-
     function setNewCount(value: number, ms: number = 10) {
         setCount(value)
         countDown(value, ms)

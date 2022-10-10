@@ -1,14 +1,34 @@
 import React from "react"
 import jwtDecode, { JwtPayload } from "jwt-decode"
+import { IUser } from "@/types"
+import axios from "@/configs/axios"
 
 export type UserStatus = "AUTHENTICATED" | "UNAUTHENTICATED" | null
 
+function defaultError() {
+    throw new Error("UseContext should inside UserProvider")
+}
+
 export const UserContext = React.createContext<{
-    user: any
+    user: IUser | undefined | null
     status: UserStatus
     reAuth: () => void
     logout: () => void
-}>({ user: null, status: null, reAuth() {}, logout() {} })
+    login: (username: string, password: string) => Promise<string | undefined>
+}>({
+    user: null,
+    status: null,
+    reAuth() {
+        defaultError()
+    },
+    logout() {
+        defaultError()
+    },
+    async login() {
+        defaultError()
+        return undefined
+    },
+})
 
 interface Props {
     children: React.ReactNode
@@ -40,7 +60,21 @@ function UserProvider(props: Props) {
 
     function logout() {
         localStorage.removeItem("accessToken")
-        getUser()
+        setStatus("UNAUTHENTICATED")
+    }
+
+    async function login(
+        username: string,
+        password: string
+    ): Promise<string | undefined> {
+        try {
+            const res = await axios.post("/admin/login", { username, password })
+            localStorage.setItem("accessToken", res.data.accessToken)
+            getUser()
+            return "success"
+        } catch (error: any) {
+            throw new Error(error.response.data?.message || error.messagee)
+        }
     }
 
     React.useEffect(() => {
@@ -48,7 +82,9 @@ function UserProvider(props: Props) {
     }, [])
 
     return (
-        <UserContext.Provider value={{ user, status, reAuth: getUser, logout }}>
+        <UserContext.Provider
+            value={{ user, status, reAuth: getUser, logout, login }}
+        >
             {props.children}
         </UserContext.Provider>
     )

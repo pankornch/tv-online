@@ -12,10 +12,9 @@ const HlsPlayerMemo = React.memo<{
             muted
             autoPlay
             className="aspect-video h-full"
-            preload="auto"
+            onError={alert}
             hlsConfig={{
                 autoStartLoad: true,
-                maxBufferSize: 1 * 1000 * 1000,
             }}
             playsInline
         />

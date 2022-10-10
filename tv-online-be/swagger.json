@@ -83,7 +83,9 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Channel"
+                            "properties": {
+                                "url": "string"
+                            }
                         }
                     }
                 }

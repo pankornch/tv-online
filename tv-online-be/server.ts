@@ -4,12 +4,12 @@ import { Server } from "socket.io";
 import http from "http";
 import router from "./src/routes";
 import cors from "cors";
-import sequelize, { authenticate } from "./src/utils/db";
-import setupSocket from "./src/routes/socket";
+import { authenticate } from "./src/utils/db";
 import swaggerUi from "swagger-ui-express";
 import swaggerJSON from "./swagger.json";
+import SocketController from "./src/controllers/socket";
+import { PORT } from "./src/utils/env";
 
-const PORT = process.env.PORT || 5500;
 const app = express();
 
 // Middleware
@@ -36,12 +36,12 @@ const io = new Server(server, {
   },
 });
 
-setupSocket(io);
+const socketController = new SocketController(io);
+socketController.setup();
 
 async function startServer() {
   await authenticate();
   // start server
-  sequelize.sync();
   server.listen(PORT, () =>
     console.log(`server is running on http://localhost:${PORT}`)
   );

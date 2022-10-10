@@ -7,7 +7,9 @@ export const upload = multer({
     },
     filename(_req, file, cb) {
       const fileName =
-        new Date().toISOString() + "_" + file.originalname.replace(/\s/g, "_");
+        new Date().toISOString() +
+        "_" +
+        file.originalname.trim().replace(/\s/g, "_");
       cb(null, fileName);
     },
   }),

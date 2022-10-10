@@ -1,28 +1,24 @@
-import React, { ChangeEvent, FormEvent } from "react"
-import { ReactComponent as LogoSVG } from "@/assets/logo.svg"
-import axios from "@/configs/axios"
-import Swal from "sweetalert2"
+import React, { FormEvent } from "react"
 import { useNavigate } from "react-router-dom"
+import Swal from "sweetalert2"
+
 import useUser from "@/hooks/useUser"
+import { setStateInput } from "@/utils"
+import { ReactComponent as LogoSVG } from "@/assets/logo.svg"
 
 function LoginPage() {
     const [username, setUsername] = React.useState<string>("")
     const [password, setPassword] = React.useState<string>("")
 
-    const { reAuth } = useUser()
+    const { login } = useUser()
 
     const navigate = useNavigate()
 
     async function handleSubmit(e: FormEvent) {
         e.preventDefault()
-        const body = {
-            username,
-            password,
-        }
+
         try {
-            const res = await axios.post("/admin/login", body)
-            localStorage.setItem("accessToken", res.data.accessToken)
-            reAuth()
+            await login(username, password)
             await Swal.fire({
                 title: "Login Success",
                 icon: "success",
@@ -30,21 +26,11 @@ function LoginPage() {
             })
             navigate("/backoffice")
         } catch (error: any) {
-            const message = error.response.data?.message || error.message
-            Swal.fire({ title: "Login Error", icon: "error", text: message })
-        }
-    }
-
-    function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
-        const { name, value } = e.target
-
-        switch (name) {
-            case "username":
-                setUsername(value)
-                break
-            case "password":
-                setPassword(value)
-                break
+            Swal.fire({
+                title: "Login Error",
+                icon: "error",
+                text: error.message,
+            })
         }
     }
 
@@ -59,7 +45,7 @@ function LoginPage() {
                     <input
                         name="username"
                         value={username}
-                        onChange={handleInputChange}
+                        onChange={setStateInput(setUsername)}
                         className="input"
                         placeholder="Username"
                         autoComplete="username"
@@ -67,7 +53,7 @@ function LoginPage() {
                     <input
                         name="password"
                         value={password}
-                        onChange={handleInputChange}
+                        onChange={setStateInput(setPassword)}
                         type="password"
                         className="input"
                         placeholder="Password"

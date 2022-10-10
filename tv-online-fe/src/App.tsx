@@ -1,22 +1,16 @@
 import { ChangeEvent, useEffect, useMemo, useState } from "react"
-import { ChannelCard } from "@/components"
-import Layout from "@/components/Layout"
-import axios from "@/configs/axios"
-import { IChannel } from "@/types"
 import { useNavigate } from "react-router-dom"
-import { debounce } from "@/utils"
-
 import Fuse from "fuse.js"
+
+import axios from "@/configs/axios"
+import { IChannel, IHotChannel } from "@/types"
+import { debounce } from "@/utils"
+import { ChannelCard, Layout } from "@/components"
 import useSocket from "./hooks/useSocket"
 
 function App() {
     const [channels, setChannels] = useState<IChannel[]>([])
-    const [hotChannels, setHotChannels] = useState<
-        {
-            channel: IChannel
-            users: string[]
-        }[]
-    >([])
+    const [hotChannels, setHotChannels] = useState<IHotChannel[]>([])
     const [searchText, setSeachText] = useState<string>("")
 
     const navigate = useNavigate()

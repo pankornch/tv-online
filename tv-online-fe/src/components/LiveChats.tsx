@@ -32,7 +32,7 @@ function LiveChats({ socket, chats, channelID }: LiveChatsProps) {
     }
 
     function handleSendComment() {
-        socket?.emit("send_chat", { channelID, uid, text })
+        socket?.emit("send_chat", { channelID, text })
         progressArcRef.current?.startCount(3000)
         setIsCooldown(true)
     }
@@ -46,7 +46,7 @@ function LiveChats({ socket, chats, channelID }: LiveChatsProps) {
 
         const el = chatContainerRef.current
 
-        el.scrollTo({ top: el.scrollHeight })
+        el.scrollTo({ top: el.scrollHeight, behavior: "smooth" })
     }
 
     return (
@@ -80,7 +80,9 @@ function LiveChats({ socket, chats, channelID }: LiveChatsProps) {
                                         })}
                                     </p>
                                 </div>
-                                <p className="leading-4">{chat.text}</p>
+                                <p className="w-96 break-words leading-4">
+                                    {chat.text}
+                                </p>
                             </div>
                         </motion.div>
                     ))}

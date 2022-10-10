@@ -1,9 +1,11 @@
+import { useEffect, useState } from "react"
+import { useParams, Link } from "react-router-dom"
+
 import Layout from "@/components/Layout"
 import axios from "@/configs/axios"
 import { IChannelLog } from "@/types"
 import { dateTimeFormat, getAvatarUrl } from "@/utils"
-import { useEffect, useState } from "react"
-import { useParams, Link } from "react-router-dom"
+
 import { ReactComponent as ArrowRightSVG } from "@/assets/arrow-right.svg"
 
 function AdminUserByIdPage() {
@@ -13,7 +15,6 @@ function AdminUserByIdPage() {
 
     async function fetchUserLogs(id: string) {
         const res = await axios.get(`/admin/channel/log/user/${id}`)
-        console.log(res.data)
         setUserLogs(res.data)
     }
 
@@ -39,40 +40,54 @@ function AdminUserByIdPage() {
                                 </p>
                             </div>
                         </div>
-                        <div className="flex max-h-screen flex-col gap-y-6 overflow-y-auto rounded-lg bg-white">
-                            <div className="sticky top-0 grid grid-cols-10 gap-x-12 border-b bg-white py-4 px-6 pb-3 text-lg font-medium">
-                                <p>No.</p>
-                                <p className="col-span-2">Cover</p>
-                                <p className="col-span-2">Name</p>
-                                <p className="col-span-2">Title</p>
-                                <p className="col-span-2">Date Time</p>
-                            </div>
-                            {userLogs.map((item, index) => (
-                                <div
-                                    key={item.id}
-                                    className="grid grid-cols-10 gap-x-12 py-4 px-6 transition-all hover:bg-gray-100"
-                                >
-                                    <p className="col-span-1">{index + 1}</p>
-                                    <img
-                                        src={item.channel.image}
-                                        className="col-span-2 aspect-video h-24 object-cover"
-                                    />
-                                    <p className="col-span-2">
-                                        {item.channel.name}
-                                    </p>
-                                    <p className="col-span-2">
-                                        {item.channel.title}
-                                    </p>
-                                    <p className="col-span-2">
-                                        {dateTimeFormat(item.createdAt)}
-                                    </p>
-                                    <div className="col-span-1">
-                                        <Link to={`/channel/${item.channelID}`}>
-                                            <ArrowRightSVG className="h-6 hover:text-orange-500" />
-                                        </Link>
-                                    </div>
-                                </div>
-                            ))}
+
+                        <div className="max-h-[calc(100vh-5rem-8rem)] min-h-[24rem] overflow-auto rounded-lg bg-white">
+                            <table className="w-full table-auto text-center">
+                                <thead className="sticky top-0 bg-white shadow-md">
+                                    <tr className="">
+                                        <th className="px-6 py-4">No.</th>
+                                        <th className="px-6 py-4">Cover</th>
+                                        <th className="px-6 py-4">Name</th>
+                                        <th className="px-6 py-4">Title</th>
+                                        <th className="px-6 py-4">Date</th>
+                                        <th className="px-6 py-4"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {userLogs.map((item, index) => (
+                                        <tr
+                                            key={item.id}
+                                            className="transition-all hover:bg-gray-100"
+                                        >
+                                            <td className="px-6 py-4">
+                                                {index + 1}
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <img
+                                                    src={item.channel.image}
+                                                    className="mx-auto aspect-video w-32 object-cover"
+                                                />
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                {item.channel.name}
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                {item.channel.title}
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                {dateTimeFormat(item.createdAt)}
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <Link
+                                                    to={`/channel/${item.channelID}`}
+                                                >
+                                                    <ArrowRightSVG className="h-6 hover:text-orange-500" />
+                                                </Link>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
                     </>
                 )}

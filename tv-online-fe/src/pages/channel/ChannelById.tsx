@@ -1,21 +1,18 @@
-import React, { useCallback, useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { Link, useParams } from "react-router-dom"
-
-import axios from "@/configs/axios"
-import { IChannel, IChannelChat } from "@/types"
-
-import Layout from "@/components/Layout"
-import useUserID from "@/hooks/useUserID"
-import useSocket from "@/hooks/useSocket"
-
-import { ReactComponent as UserSVG } from "@/assets/user.svg"
-
-import AvatarGroup from "@/components/AvatarGroup"
-import { cls, compactNumber, getAvatarUrl } from "@/utils"
-import { Player } from "@/components/Player"
 import { Socket } from "socket.io-client"
 import { AnimatePresence, motion } from "framer-motion"
-import LiveChats from "@/components/LiveChats"
+
+import axios from "@/configs/axios"
+import { EUserRole, IChannel, IChannelChat } from "@/types"
+import { Layout, AvatarGroup, LiveChats, Player } from "@/components"
+import useUserID from "@/hooks/useUserID"
+import useSocket from "@/hooks/useSocket"
+import useUser from "@/hooks/useUser"
+import { cls, compactNumber, getAvatarUrl } from "@/utils"
+
+import { ReactComponent as UserSVG } from "@/assets/user.svg"
+import { ReactComponent as ChartSVG } from "@/assets/chart.svg"
 
 function ChannelByIdPage() {
     let { id } = useParams()
@@ -23,6 +20,8 @@ function ChannelByIdPage() {
     const [channel, setChannel] = useState<IChannel | null>(null)
     const [userWatching, setUserWatching] = useState<string[]>([])
     const playerRef = useRef<null | HTMLVideoElement>(null)
+
+    const { user } = useUser()
 
     const [uid] = useUserID()
     const socket = useSocket()
@@ -51,7 +50,6 @@ function ChannelByIdPage() {
         return () => {
             socket.emit("leave_channel", { channelID: id, uid })
             socket.off(channelNsp)
-            // socket.disconnect()
         }
     }, [socket, id])
 
@@ -59,9 +57,17 @@ function ChannelByIdPage() {
         <Layout>
             <div className="grid grid-cols-1 gap-12 pb-6 lg:grid-cols-3">
                 <div className="col-span-2">
-                    <div className="my-4 flex items-center gap-x-4">
+                    <div className="my-4 flex items-center gap-x-4 text-white">
                         <div className="h-6 w-[2px] bg-slate-100" />
-                        <h4 className="text-white">LIVE</h4>
+                        <h4>LIVE</h4>
+                        {user?.role === EUserRole.ADMIN && (
+                            <Link
+                                to={`/backoffice/channel/${id}`}
+                                className="ml-auto"
+                            >
+                                <ChartSVG className="h-6 hover:text-orange-500" />
+                            </Link>
+                        )}
                     </div>
                     {channel && (
                         <div className="">
@@ -121,11 +127,9 @@ function SideChannel({ socket }: SideChannelProps) {
     const [selectedSide, setSelectedSide] = useState<"SUGGEST" | "CHAT">("CHAT")
 
     const [chats, setChats] = useState<IChannelChat[]>([])
-    const chatsRef = useRef<IChannelChat[]>([])
 
     const onGetChats = (data: IChannelChat) => {
-        chatsRef.current.push(data)
-        setChats([...chatsRef.current])
+        setChats((prev) => [...prev, data])
     }
 
     useEffect(() => {

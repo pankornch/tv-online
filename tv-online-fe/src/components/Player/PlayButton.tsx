@@ -5,6 +5,7 @@ import { ReactComponent as PauseSVG } from "@/assets/pause.svg"
 import { ReactComponent as MuteSVG } from "@/assets/mute.svg"
 import { ReactComponent as SpeakerSVG } from "@/assets/speaker.svg"
 import { ReactComponent as FullScreenSVG } from "@/assets/full-screen.svg"
+import { ReactComponent as LoadingSVG } from "@/assets/loading.svg"
 
 interface Props {
     playerRef: React.MutableRefObject<HTMLVideoElement | null>
@@ -14,6 +15,7 @@ function PlayButton(props: Props) {
     const [isPlayed, setIsPlayed] = React.useState<boolean>(false)
     const [isShow, setIsShow] = React.useState<boolean>(true)
     const [isMuted, setIsMuted] = React.useState<boolean>(true)
+    const [loading, setLoading] = React.useState<boolean>(true)
     const timerRef = React.useRef<NodeJS.Timer>()
 
     React.useEffect(() => {
@@ -21,6 +23,10 @@ function PlayButton(props: Props) {
         setIsPlayed(!props.playerRef.current.paused)
 
         props.playerRef.current.onplaying = handlePlay
+        props.playerRef.current.onloadeddata = () => setLoading(false)
+        props.playerRef.current.onsuspend = console.log
+        props.playerRef.current.onerror = console.log
+
         setIsMuted(props.playerRef.current.muted)
     }, [])
 
@@ -32,6 +38,8 @@ function PlayButton(props: Props) {
     }
 
     function togglePlay() {
+        if (loading) return
+
         props.playerRef.current?.paused
             ? props.playerRef.current.play()
             : props.playerRef.current?.pause()
@@ -81,11 +89,14 @@ function PlayButton(props: Props) {
                         transition={{ duration: 0.3 }}
                         className="flex cursor-pointer items-center justify-center rounded-full bg-black/75 p-3 text-white"
                     >
-                        {isPlayed ? (
+                        {loading ? (
+                            <LoadingSVG className="h-8 animate-spin opacity-75" />
+                        ) : isPlayed ? (
                             <PauseSVG className="h-8" />
                         ) : (
                             <PlaySVG className="h-8 translate-x-[7.5%]" />
                         )}
+
                         <div className="absolute bottom-3 right-3 flex items-center gap-x-3">
                             <button onClick={toggleMute}>
                                 {isMuted ? (

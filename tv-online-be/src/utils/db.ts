@@ -5,7 +5,7 @@ const sequelize = new Sequelize(PG_URI!);
 
 export async function authenticate() {
   try {
-    // await sequelize.authenticate();
+    await sequelize.authenticate();
     console.log("Connection has been established successfully.");
   } catch (error) {
     console.error("Unable to connect to the database:", error);

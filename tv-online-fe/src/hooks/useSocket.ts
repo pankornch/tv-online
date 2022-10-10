@@ -14,6 +14,8 @@ function useSocket() {
 
         return () => {
             _socket.off("connect")
+            _socket.disconnect()
+            console.log("socket disconnect")
         }
     }, [])
 

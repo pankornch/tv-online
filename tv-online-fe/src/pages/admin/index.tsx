@@ -1,12 +1,19 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react"
-import { ChannelCard } from "@/components"
-import Layout from "@/components/Layout"
-import Modal from "@/components/Modal"
+import { useNavigate } from "react-router-dom"
+import Fuse from "fuse.js"
+import Swal from "sweetalert2"
+
+import { ChannelCard, Modal, Layout, ImageUploader } from "@/components"
 import axios from "@/configs/axios"
 import { IChannel } from "@/types"
-import Swal from "sweetalert2"
-import ImageUploader from "@/components/ImageUploader"
-import Fuse from "fuse.js"
+import useSocket from "@/hooks/useSocket"
+import {
+    cloneObj,
+    handleUploadImage,
+    debounce,
+    compactNumber,
+    setStateInputObj,
+} from "@/utils"
 
 import { ReactComponent as AddSVG } from "@/assets/add.svg"
 import { ReactComponent as CloseSVG } from "@/assets/close.svg"
@@ -14,10 +21,6 @@ import { ReactComponent as EditSVG } from "@/assets/edit.svg"
 import { ReactComponent as ChartSVG } from "@/assets/chart.svg"
 import { ReactComponent as UserSVG } from "@/assets/user-solid.svg"
 import { ReactComponent as TvSVG } from "@/assets/tv-solid.svg"
-
-import { cloneObj, handleUploadImage, debounce, compactNumber } from "@/utils"
-import { useNavigate } from "react-router-dom"
-import useSocket from "@/hooks/useSocket"
 
 function BackofficeIndexPage() {
     const [channels, setChannels] = useState<IChannel[]>([])
@@ -109,19 +112,19 @@ function BackofficeIndexPage() {
     return (
         <Layout>
             <div className="space-y-12">
-                <div className="grid grid-cols-12 items-center justify-end gap-x-3">
+                <div className="grid grid-cols-12 items-center justify-end gap-x-3 gap-y-6">
                     <div className="col-span-1 hidden md:col-span-3 md:block"></div>
                     <input
-                        className="input col-span-6 sm:col-span-8 md:col-span-6"
+                        className="input col-span-12 sm:col-span-8 md:col-span-6"
                         placeholder="Search channel"
                         onChange={debounceSearch}
                     />
-                    <div className="col-span-6 flex justify-end sm:col-span-4 md:col-span-3">
+                    <div className="col-span-12 flex justify-start sm:col-span-4 md:col-span-3 md:justify-end">
                         <ModalAddChannel onSubmit={handleSubmitChannel} />
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-x-24 gap-y-12 md:grid-cols-2">
+                <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
                     <div className="flex items-center gap-x-6 rounded-lg bg-neutral-700 p-4 text-green-500">
                         <UserSVG className="h-20" />
                         <div className="flex items-center gap-x-3">
@@ -265,16 +268,6 @@ function ModalEditChannel(props: ModalEditChannelProps) {
         }
     }
 
-    function handleChangeInput(
-        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) {
-        const { name, value } = e.target
-
-        const cloneChannel = cloneObj<any>(currentChannel!)
-        cloneChannel[name as keyof IChannel] = value
-        setCurrentChannel(cloneChannel)
-    }
-
     function handleImageChange(url: string, file: File) {
         const cloneChannel = cloneObj(currentChannel!)
         cloneChannel.image = url
@@ -316,7 +309,7 @@ function ModalEditChannel(props: ModalEditChannelProps) {
                         className="input"
                         name="name"
                         value={currentChannel?.name || ""}
-                        onChange={handleChangeInput}
+                        onChange={setStateInputObj(setCurrentChannel)}
                     />
                 </label>
                 <label>
@@ -325,7 +318,7 @@ function ModalEditChannel(props: ModalEditChannelProps) {
                         className="input"
                         name="url"
                         value={currentChannel?.url || ""}
-                        onChange={handleChangeInput}
+                        onChange={setStateInputObj(setCurrentChannel)}
                     />
                 </label>
                 <label>
@@ -334,7 +327,7 @@ function ModalEditChannel(props: ModalEditChannelProps) {
                         className="input"
                         name="title"
                         value={currentChannel?.title || ""}
-                        onChange={handleChangeInput}
+                        onChange={setStateInputObj(setCurrentChannel)}
                     />
                 </label>
                 <label>
@@ -343,7 +336,7 @@ function ModalEditChannel(props: ModalEditChannelProps) {
                         className="input focus:transition-none"
                         name="description"
                         value={currentChannel?.description || ""}
-                        onChange={handleChangeInput}
+                        onChange={setStateInputObj(setCurrentChannel)}
                     />
                 </label>
                 <div className="space-y-3">
@@ -391,16 +384,6 @@ function ModalAddChannel(props: ModalAddChannelProps) {
     function handleCloseModal() {
         setOpenModal(false)
         setCurrentChannel({})
-    }
-
-    function handleChangeInput(
-        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) {
-        const { name, value } = e.target
-
-        const cloneChannel = cloneObj<any>(currentChannel)
-        cloneChannel[name as keyof IChannel] = value
-        setCurrentChannel(cloneChannel)
     }
 
     function handleImageChange(url: string, file: File) {
@@ -471,7 +454,7 @@ function ModalAddChannel(props: ModalAddChannelProps) {
                             className="input"
                             name="name"
                             value={currentChannel?.name || ""}
-                            onChange={handleChangeInput}
+                            onChange={setStateInputObj(setCurrentChannel)}
                         />
                     </label>
                     <label>
@@ -480,7 +463,7 @@ function ModalAddChannel(props: ModalAddChannelProps) {
                             className="input"
                             name="url"
                             value={currentChannel?.url || ""}
-                            onChange={handleChangeInput}
+                            onChange={setStateInputObj(setCurrentChannel)}
                         />
                     </label>
                     <label>
@@ -489,7 +472,7 @@ function ModalAddChannel(props: ModalAddChannelProps) {
                             className="input"
                             name="title"
                             value={currentChannel?.title || ""}
-                            onChange={handleChangeInput}
+                            onChange={setStateInputObj(setCurrentChannel)}
                         />
                     </label>
                     <label>
@@ -498,7 +481,7 @@ function ModalAddChannel(props: ModalAddChannelProps) {
                             className="input focus:transition-none"
                             name="description"
                             value={currentChannel?.description || ""}
-                            onChange={handleChangeInput}
+                            onChange={setStateInputObj(setCurrentChannel)}
                         />
                     </label>
                     <div className="space-y-3">

@@ -100,6 +100,7 @@ export async function adminGetChannleLogByChannelID(
           [Op.between]: [startDate, endDate],
         },
       },
+      order: [["createdAt", "DESC"]],
     });
 
     res.json(channelLog);
@@ -116,6 +117,7 @@ export async function adminGetChannelLogByUID(req: Request, res: Response) {
         uid,
       },
       include: [Channel],
+      order: [["createdAt", "DESC"]],
     });
 
     res.json(JSON.parse(JSON.stringify(channelLog)));

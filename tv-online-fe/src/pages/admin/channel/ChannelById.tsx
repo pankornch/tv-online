@@ -1,13 +1,8 @@
 import React, { useState, useRef, useEffect, useMemo } from "react"
 import { Link, useParams } from "react-router-dom"
-import { IChannel, IChannelChat, IChannelLog } from "@/types"
-import axios from "@/configs/axios"
-import Layout from "@/components/Layout"
-import { Player } from "@/components/Player"
-import { ReactComponent as UserSVG } from "@/assets/user.svg"
-
-import { cls, compactNumber, getAvatarUrl, getDate } from "@/utils"
 import { Line } from "react-chartjs-2"
+import { Socket } from "socket.io-client"
+import { AnimatePresence, motion } from "framer-motion"
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -18,11 +13,22 @@ import {
     Tooltip,
     Legend,
 } from "chart.js"
-import useSocket from "@/hooks/useSocket"
-import { Socket } from "socket.io-client"
 
-import LiveChats from "@/components/LiveChats"
-import { AnimatePresence, motion } from "framer-motion"
+import { IChannel, IChannelChat, IChannelLog } from "@/types"
+import axios from "@/configs/axios"
+import { Layout, Player, LiveChats } from "@/components"
+import {
+    cls,
+    compactNumber,
+    dateTimeFormat,
+    getAvatarUrl,
+    getDate,
+} from "@/utils"
+
+import { ReactComponent as UserSVG } from "@/assets/user.svg"
+
+import useSocket from "@/hooks/useSocket"
+import useUserID from "@/hooks/useUserID"
 
 ChartJS.register(
     CategoryScale,
@@ -36,6 +42,7 @@ ChartJS.register(
 
 function AdminChannelByIdPage() {
     let { id } = useParams()
+    const [uid] = useUserID()
 
     const [channel, setChannel] = useState<IChannel | null>(null)
     const [userWatching, setUserWatching] = useState<string[]>([])
@@ -67,30 +74,13 @@ function AdminChannelByIdPage() {
         fetchLogs(id)
     }, [id])
 
-    const logToDatasets = useMemo(() => {
-        if (!channelLogs.length) return []
-
-        const result = channelLogs.reduce<number[]>((acc, curr) => {
-            const localTime = new Date(curr.createdAt).toLocaleTimeString("th")
-            const [h] = localTime.split(":")
-
-            const idx = Number(h)
-            if (!acc[idx]) acc[idx] = 0
-
-            acc[idx]++
-
-            return acc
-        }, [])
-
-        return result
-    }, [channelLogs])
-
     useEffect(() => {
         if (!socket || !id) return
 
         const channelNsp = `channel|${id}`
 
         socket
+            .emit("init", { uid })
             .emit("get_users_channel", { channelID: id })
             .on(channelNsp, (data: string[]) => {
                 setUserWatching(data)
@@ -145,7 +135,7 @@ function AdminChannelByIdPage() {
                     <SideChannel
                         socket={socket}
                         userWatching={userWatching}
-                        datasets={logToDatasets}
+                        channelLogs={channelLogs}
                     />
                 </div>
             </div>
@@ -156,19 +146,20 @@ function AdminChannelByIdPage() {
 interface SideChannelProps {
     socket?: Socket
     userWatching: string[]
-    datasets: number[]
+    channelLogs: IChannelLog[]
 }
-function SideChannel({ socket, userWatching, datasets }: SideChannelProps) {
+function SideChannel({ socket, userWatching, channelLogs }: SideChannelProps) {
     const { id } = useParams()
 
     const [chats, setChats] = useState<IChannelChat[]>([])
     const [selectedSide, setSelectedSide] = useState<"CHART" | "CHAT">("CHAT")
 
-    const chatsRef = useRef<IChannelChat[]>([])
+    // const chatsRef = useRef<IChannelChat[]>([])
 
     const onGetChats = (data: IChannelChat) => {
-        chatsRef.current.push(data)
-        setChats([...chatsRef.current])
+        // chatsRef.current.push(data)
+        // setChats([...chatsRef.current])
+        setChats((prev) => [...prev, data])
     }
 
     useEffect(() => {
@@ -185,7 +176,8 @@ function SideChannel({ socket, userWatching, datasets }: SideChannelProps) {
             const res = await axios.get(`admin/channel/chat/${id}`, {
                 params: { date },
             })
-            chatsRef.current = res.data
+            // chatsRef.current = res.data
+            setChats(res.data)
             setChats(res.data)
         } catch (error) {
             console.log(error)
@@ -236,7 +228,10 @@ function SideChannel({ socket, userWatching, datasets }: SideChannelProps) {
                         animate="animate"
                         exit="exit"
                     >
-                        <ChannelChart datasets={datasets} />
+                        <ChannelChart
+                            channelLogs={channelLogs}
+                            userWatching={userWatching}
+                        />
                     </motion.div>
                 ) : (
                     <motion.div
@@ -255,7 +250,64 @@ function SideChannel({ socket, userWatching, datasets }: SideChannelProps) {
                     </motion.div>
                 )}
             </AnimatePresence>
+        </>
+    )
+}
 
+interface ChannelChartProps {
+    userWatching: string[]
+    channelLogs: IChannelLog[]
+}
+
+function ChannelChart({ userWatching, channelLogs }: ChannelChartProps) {
+    const { id } = useParams()
+
+    const chartLabels = useMemo(() => {
+        const labels: string[] = []
+
+        for (let i = 0; i < 24; i++) {
+            const h = i % 12
+            labels.push(`${h === 0 ? "12" : h} ${i < 12 ? "AM" : "PM"} `)
+        }
+
+        return labels
+    }, [])
+
+    const datasets = useMemo(() => {
+        if (!channelLogs.length) return []
+
+        const result = channelLogs.reduce<number[]>((acc, curr) => {
+            const localTime = new Date(curr.createdAt).toLocaleTimeString("th")
+            const [h] = localTime.split(":")
+
+            const idx = Number(h)
+            if (!acc[idx]) acc[idx] = 0
+
+            acc[idx]++
+
+            return acc
+        }, [])
+
+        return result
+    }, [channelLogs])
+
+    return (
+        <>
+            <div className="rounded-lg bg-neutral-700 p-2 shadow-lg">
+                <Line
+                    data={{
+                        labels: chartLabels,
+                        datasets: [
+                            {
+                                label: "User counts",
+                                data: datasets,
+                                borderColor: "#f97316",
+                                backgroundColor: "#fed7aa",
+                            },
+                        ],
+                    }}
+                />
+            </div>
             <div className="mt-12 rounded-lg bg-neutral-700 p-4 text-neutral-400 shadow-lg">
                 <p className="text-right text-gray-400">
                     {compactNumber(userWatching.length)} USERS WATCHING
@@ -277,41 +329,36 @@ function SideChannel({ socket, userWatching, datasets }: SideChannelProps) {
                     ))}
                 </div>
             </div>
+
+            <div className="mt-12 rounded-lg bg-neutral-700 p-4 text-neutral-400 shadow-lg">
+                <p className="text-right text-gray-400">
+                    {compactNumber(channelLogs.length)} Logs
+                </p>
+                <div className="mt-6 grid max-h-96 gap-6 overflow-y-auto">
+                    {channelLogs.map((log) => (
+                        <Link
+                            to={`/backoffice/user/${log.uid}`}
+                            key={log.id}
+                            className="flex items-center gap-x-3"
+                        >
+                            <img
+                                className="h-8 w-8 rounded-full"
+                                src={getAvatarUrl(log.uid ?? "")}
+                                alt={log.uid}
+                            />
+                            <p>{log.uid}</p>
+
+                            <p className="ml-auto text-sm">
+                                {dateTimeFormat(log.createdAt, {
+                                    dateStyle: "short",
+                                    timeStyle: "short",
+                                })}
+                            </p>
+                        </Link>
+                    ))}
+                </div>
+            </div>
         </>
-    )
-}
-
-interface ChannelChartProps {
-    datasets: number[]
-}
-
-function ChannelChart({ datasets }: ChannelChartProps) {
-    const chartLabels = useMemo(() => {
-        const labels: string[] = []
-
-        for (let i = 0; i < 24; i++) {
-            const h = i % 12
-            labels.push(`${h === 0 ? "12" : h} ${i < 12 ? "AM" : "PM"} `)
-        }
-
-        return labels
-    }, [])
-    return (
-        <div className="rounded-lg bg-neutral-700 p-2 shadow-lg">
-            <Line
-                data={{
-                    labels: chartLabels,
-                    datasets: [
-                        {
-                            label: "User counts",
-                            data: datasets,
-                            borderColor: "#f97316",
-                            backgroundColor: "#fed7aa",
-                        },
-                    ],
-                }}
-            />
-        </div>
     )
 }
 

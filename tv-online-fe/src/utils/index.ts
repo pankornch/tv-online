@@ -70,3 +70,13 @@ export function setStateInput(setState: React.SetStateAction<any>) {
         setState(value)
     }
 }
+
+export function setStateInputObj(setState: React.SetStateAction<any>) {
+    return (e: React.ChangeEvent<any>) => {
+        const { value, name } = e.target
+        setState((prev: any) => {
+            prev[name] = value
+            return { ...prev }
+        })
+    }
+}
