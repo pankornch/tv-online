@@ -7,8 +7,6 @@ interface Props {
 }
 
 function ImageUploader(props: Props) {
-    // const [file, setFile] = React.useState<File | null>(null)
-
     const previewImage = React.useMemo<string>(() => {
         if (!props.value) return ""
 

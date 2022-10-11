@@ -106,6 +106,7 @@ class SocketController {
       .filter(([_, users]) => users.length)
       .slice(0, 5)
       .sort((a, b) => b[1].length - a[1].length);
+
     const channels = await Promise.all(
       sortChannels.map(async (item) => {
         const [channelID, users] = item;
@@ -118,6 +119,7 @@ class SocketController {
         };
       })
     );
+
     this.io.emit("hot_channels", channels);
   }
 

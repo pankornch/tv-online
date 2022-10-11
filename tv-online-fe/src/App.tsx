@@ -5,7 +5,7 @@ import Fuse from "fuse.js"
 import axios from "@/configs/axios"
 import { IChannel, IHotChannel } from "@/types"
 import { debounce } from "@/utils"
-import { ChannelCard, Layout } from "@/components"
+import { ChannelCard, ChannelGridContainer, Layout } from "@/components"
 import useSocket from "./hooks/useSocket"
 
 function App() {
@@ -87,7 +87,7 @@ function App() {
                 </div>
 
                 <h3 className="mb-6 text-white">CHANNELS</h3>
-                <div className="grid grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-3">
+                <ChannelGridContainer>
                     {getChannels.map((channel) => (
                         <ChannelCard
                             key={channel.id}
@@ -95,7 +95,7 @@ function App() {
                             onClick={handleNavigate}
                         />
                     ))}
-                </div>
+                </ChannelGridContainer>
             </div>
         </Layout>
     )

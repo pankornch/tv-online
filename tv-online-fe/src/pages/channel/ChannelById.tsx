@@ -1,15 +1,14 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { Socket } from "socket.io-client"
-import { AnimatePresence, motion } from "framer-motion"
 
 import axios from "@/configs/axios"
 import { EUserRole, IChannel, IChannelChat } from "@/types"
-import { Layout, AvatarGroup, LiveChats, Player } from "@/components"
+import { Layout, LiveChats, ChannelSection, ToggleMenu } from "@/components"
 import useUserID from "@/hooks/useUserID"
 import useSocket from "@/hooks/useSocket"
 import useUser from "@/hooks/useUser"
-import { cls, compactNumber, getAvatarUrl } from "@/utils"
+import { cls } from "@/utils"
 
 import { ReactComponent as UserSVG } from "@/assets/user.svg"
 import { ReactComponent as ChartSVG } from "@/assets/chart.svg"
@@ -19,7 +18,6 @@ function ChannelByIdPage() {
 
     const [channel, setChannel] = useState<IChannel | null>(null)
     const [userWatching, setUserWatching] = useState<string[]>([])
-    const playerRef = useRef<null | HTMLVideoElement>(null)
 
     const { user } = useUser()
 
@@ -70,45 +68,10 @@ function ChannelByIdPage() {
                         )}
                     </div>
                     {channel && (
-                        <div className="">
-                            <Player
-                                url={channel.url}
-                                playerRef={playerRef}
-                                userCount={userWatching.length}
-                            />
-
-                            <div className="mt-4 grid grid-cols-9 items-start">
-                                <div className="col-span-7">
-                                    <h4 className="truncate pr-6 font-medium text-white">
-                                        {channel.name}: {channel.title}
-                                    </h4>
-                                    <p className="mt-4 text-gray-400">
-                                        {channel.description}
-                                    </p>
-                                </div>
-
-                                <div className="col-span-2 flex flex-col items-end gap-y-3 text-white">
-                                    <div className="flex items-center gap-x-2">
-                                        <UserSVG className="h-4" />
-                                        <p>
-                                            {compactNumber(channel.views)} views
-                                        </p>
-                                    </div>
-
-                                    <AvatarGroup
-                                        urls={userWatching.map((e) =>
-                                            getAvatarUrl(e)
-                                        )}
-                                        max={2}
-                                    />
-
-                                    <p className="text-xs text-gray-400">
-                                        {compactNumber(userWatching.length)}{" "}
-                                        USERS WATCHING
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                        <ChannelSection
+                            channel={channel}
+                            userWatching={userWatching}
+                        />
                     )}
                 </div>
                 <div className="col-span-2 lg:col-span-1">
@@ -138,11 +101,6 @@ function SideChannel({ socket }: SideChannelProps) {
         if (!socket || !id) return
         socket.on(`channel_chats|${id}`, onGetChats)
     }, [socket, id])
-
-    const variant = {
-        animate: { x: 0, opacity: 1 },
-        exit: { opacity: 0 },
-    }
 
     return (
         <>
@@ -174,35 +132,22 @@ function SideChannel({ socket }: SideChannelProps) {
                 </div>
             </div>
             <>
-                <AnimatePresence initial={false} mode="wait">
-                    {selectedSide === "SUGGEST" ? (
-                        <motion.div
-                            key="SUGGEST"
-                            variants={variant}
-                            transition={{ duration: 0.2 }}
-                            initial="exit"
-                            animate="animate"
-                            exit="exit"
-                        >
-                            <SuggestChannels />
-                        </motion.div>
-                    ) : (
-                        <motion.div
-                            key="CHAT"
-                            variants={variant}
-                            transition={{ duration: 0.2 }}
-                            initial="exit"
-                            animate="animate"
-                            exit="exit"
-                        >
-                            <LiveChats
-                                channelID={id!}
-                                socket={socket}
-                                chats={chats}
-                            />
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                <ToggleMenu
+                    value={selectedSide}
+                    menus={[
+                        { key: "SUGGEST", children: <SuggestChannels /> },
+                        {
+                            key: "CHAT",
+                            children: (
+                                <LiveChats
+                                    channelID={id!}
+                                    socket={socket}
+                                    chats={chats}
+                                />
+                            ),
+                        },
+                    ]}
+                />
             </>
         </>
     )

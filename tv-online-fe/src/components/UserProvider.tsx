@@ -6,16 +6,18 @@ import axios from "@/configs/axios"
 export type UserStatus = "AUTHENTICATED" | "UNAUTHENTICATED" | null
 
 function defaultError() {
-    throw new Error("UseContext should inside UserProvider")
+    throw new Error("UserContext should inside UserProvider")
 }
 
-export const UserContext = React.createContext<{
+export interface UserContextProps {
     user: IUser | undefined | null
     status: UserStatus
     reAuth: () => void
     logout: () => void
     login: (username: string, password: string) => Promise<string | undefined>
-}>({
+}
+
+const defaultContextValue: UserContextProps = {
     user: null,
     status: null,
     reAuth() {
@@ -28,7 +30,10 @@ export const UserContext = React.createContext<{
         defaultError()
         return undefined
     },
-})
+}
+
+export const UserContext =
+    React.createContext<UserContextProps>(defaultContextValue)
 
 interface Props {
     children: React.ReactNode
@@ -38,7 +43,7 @@ function UserProvider(props: Props) {
     const [user, setUser] = React.useState<any | null>(null)
     const [status, setStatus] = React.useState<UserStatus>(null)
 
-    function getUser() {
+    function getUser(): void {
         const accessToken = localStorage.getItem("accessToken")
         if (!accessToken) {
             setStatus("UNAUTHENTICATED")
@@ -58,7 +63,7 @@ function UserProvider(props: Props) {
         setStatus("AUTHENTICATED")
     }
 
-    function logout() {
+    function logout(): void {
         localStorage.removeItem("accessToken")
         setStatus("UNAUTHENTICATED")
     }

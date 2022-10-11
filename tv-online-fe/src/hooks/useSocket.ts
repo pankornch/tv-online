@@ -1,7 +1,8 @@
 import React from "react"
 import socket from "@/configs/socket"
+import { Socket } from "socket.io-client"
 
-function useSocket() {
+function useSocket(): Socket | undefined {
     const [socketio, setSocketio] = React.useState<ReturnType<typeof socket>>()
 
     React.useEffect(() => {

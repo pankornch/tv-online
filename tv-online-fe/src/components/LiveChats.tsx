@@ -57,34 +57,7 @@ function LiveChats({ socket, chats, channelID }: LiveChatsProps) {
             >
                 <div className="flex flex-col gap-y-4 pb-20">
                     {chats.map((chat) => (
-                        <motion.div
-                            key={chat.id}
-                            initial={{ x: "100%", opacity: 0 }}
-                            animate={{ x: "0%", opacity: 1 }}
-                            transition={{
-                                duration: 0.2,
-                            }}
-                            className="flex gap-x-4 text-white"
-                        >
-                            <img
-                                src={getAvatarUrl(chat.uid)}
-                                className="avatar-rounded h-8 w-8"
-                            />
-                            <div className="grow">
-                                <div className="flex items-center justify-between text-neutral-400">
-                                    <p className="text-sm ">{chat.uid}</p>
-                                    <p className="text-xs">
-                                        {dateTimeFormat(chat.createdAt, {
-                                            dateStyle: "short",
-                                            timeStyle: "short",
-                                        })}
-                                    </p>
-                                </div>
-                                <p className="w-96 break-words leading-4">
-                                    {chat.text}
-                                </p>
-                            </div>
-                        </motion.div>
+                        <ChatTextCard key={chat.id} chat={chat} />
                     ))}
                 </div>
                 <div className="absolute bottom-0 left-0 w-full border-t border-neutral-500 bg-neutral-700 p-4">
@@ -123,6 +96,41 @@ function LiveChats({ socket, chats, channelID }: LiveChatsProps) {
                 </div>
             </div>
         </div>
+    )
+}
+
+interface ChatTextCardProps {
+    chat: IChannelChat
+}
+function ChatTextCard({ chat }: ChatTextCardProps) {
+    return (
+        <motion.div
+            initial={{ x: "100%", opacity: 0 }}
+            animate={{ x: "0%", opacity: 1 }}
+            transition={{
+                duration: 0.2,
+            }}
+            className="flex gap-x-4 text-white"
+        >
+            <img
+                src={getAvatarUrl(chat.uid)}
+                className="avatar-rounded h-8 w-8"
+            />
+            <div className="grow">
+                <div className="flex items-center justify-between text-neutral-400">
+                    <p className="text-sm">{chat.uid}</p>
+                    <p className="text-xs">
+                        {dateTimeFormat(chat.createdAt, {
+                            dateStyle: "short",
+                            timeStyle: "short",
+                        })}
+                    </p>
+                </div>
+                <p className="max-w-[12rem] break-words leading-4">
+                    {chat.text}
+                </p>
+            </div>
+        </motion.div>
     )
 }
 

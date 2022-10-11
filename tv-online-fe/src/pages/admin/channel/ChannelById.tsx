@@ -1,8 +1,7 @@
-import React, { useState, useRef, useEffect, useMemo } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { Link, useParams } from "react-router-dom"
 import { Line } from "react-chartjs-2"
 import { Socket } from "socket.io-client"
-import { AnimatePresence, motion } from "framer-motion"
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -16,7 +15,7 @@ import {
 
 import { IChannel, IChannelChat, IChannelLog } from "@/types"
 import axios from "@/configs/axios"
-import { Layout, Player, LiveChats } from "@/components"
+import { Layout, LiveChats, ChannelSection, ToggleMenu } from "@/components"
 import {
     cls,
     compactNumber,
@@ -24,8 +23,6 @@ import {
     getAvatarUrl,
     getDate,
 } from "@/utils"
-
-import { ReactComponent as UserSVG } from "@/assets/user.svg"
 
 import useSocket from "@/hooks/useSocket"
 import useUserID from "@/hooks/useUserID"
@@ -48,7 +45,6 @@ function AdminChannelByIdPage() {
     const [userWatching, setUserWatching] = useState<string[]>([])
     const [channelLogs, setChannelLogs] = useState<IChannelLog[]>([])
 
-    const playerRef = useRef<null | HTMLVideoElement>(null)
     const socket = useSocket()
 
     async function fetchChannelById(id: string) {
@@ -92,43 +88,18 @@ function AdminChannelByIdPage() {
 
     return (
         <Layout>
-            <div className="grid grid-cols-1 gap-12 pb-6 lg:grid-cols-2">
-                <div className="col-span-1">
+            <div className="grid grid-cols-1 gap-12 pb-6 lg:grid-cols-3">
+                <div className="col-span-2">
                     <div className="my-4 flex items-center gap-x-4">
                         <div className="h-6 w-[2px] bg-slate-100" />
                         <h4 className="text-white">LIVE</h4>
                     </div>
 
                     {channel && (
-                        <div className="">
-                            <div className="aspect-video w-full">
-                                <Player
-                                    url={channel.url}
-                                    playerRef={playerRef}
-                                    userCount={userWatching.length}
-                                />
-                            </div>
-
-                            <div className="mt-4 grid grid-cols-9 items-start">
-                                <div className="col-span-7">
-                                    <h4 className="truncate pr-6 font-medium text-white">
-                                        {channel.name}: {channel.title}
-                                    </h4>
-                                    <p className="mt-4 text-gray-400">
-                                        {channel.description}
-                                    </p>
-                                </div>
-
-                                <div className="col-span-2 flex flex-col items-end gap-y-3 text-white">
-                                    <div className="flex items-center gap-x-2">
-                                        <UserSVG className="h-4" />
-                                        <p>
-                                            {compactNumber(channel.views)} views
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <ChannelSection
+                            channel={channel}
+                            userWatching={userWatching}
+                        />
                     )}
                 </div>
                 <div className="col-span-1 flex flex-col">
@@ -154,11 +125,7 @@ function SideChannel({ socket, userWatching, channelLogs }: SideChannelProps) {
     const [chats, setChats] = useState<IChannelChat[]>([])
     const [selectedSide, setSelectedSide] = useState<"CHART" | "CHAT">("CHAT")
 
-    // const chatsRef = useRef<IChannelChat[]>([])
-
     const onGetChats = (data: IChannelChat) => {
-        // chatsRef.current.push(data)
-        // setChats([...chatsRef.current])
         setChats((prev) => [...prev, data])
     }
 
@@ -176,17 +143,11 @@ function SideChannel({ socket, userWatching, channelLogs }: SideChannelProps) {
             const res = await axios.get(`admin/channel/chat/${id}`, {
                 params: { date },
             })
-            // chatsRef.current = res.data
             setChats(res.data)
             setChats(res.data)
         } catch (error) {
             console.log(error)
         }
-    }
-
-    const variant = {
-        animate: { x: 0, opacity: 1 },
-        exit: { opacity: 0 },
     }
 
     return (
@@ -218,38 +179,31 @@ function SideChannel({ socket, userWatching, channelLogs }: SideChannelProps) {
                     </button>
                 </div>
             </div>
-            <AnimatePresence mode="wait">
-                {selectedSide === "CHART" ? (
-                    <motion.div
-                        key="CHART"
-                        variants={variant}
-                        transition={{ duration: 0.2 }}
-                        initial="exit"
-                        animate="animate"
-                        exit="exit"
-                    >
-                        <ChannelChart
-                            channelLogs={channelLogs}
-                            userWatching={userWatching}
-                        />
-                    </motion.div>
-                ) : (
-                    <motion.div
-                        key="CHAT"
-                        variants={variant}
-                        transition={{ duration: 0.2 }}
-                        initial="exit"
-                        animate="animate"
-                        exit="exit"
-                    >
-                        <LiveChats
-                            channelID={id!}
-                            socket={socket}
-                            chats={chats}
-                        />
-                    </motion.div>
-                )}
-            </AnimatePresence>
+
+            <ToggleMenu
+                value={selectedSide}
+                menus={[
+                    {
+                        key: "CHART",
+                        children: (
+                            <ChannelChart
+                                channelLogs={channelLogs}
+                                userWatching={userWatching}
+                            />
+                        ),
+                    },
+                    {
+                        key: "CHAT",
+                        children: (
+                            <LiveChats
+                                channelID={id!}
+                                socket={socket}
+                                chats={chats}
+                            />
+                        ),
+                    },
+                ]}
+            />
         </>
     )
 }
@@ -260,14 +214,12 @@ interface ChannelChartProps {
 }
 
 function ChannelChart({ userWatching, channelLogs }: ChannelChartProps) {
-    const { id } = useParams()
-
     const chartLabels = useMemo(() => {
         const labels: string[] = []
 
         for (let i = 0; i < 24; i++) {
             const h = i % 12
-            labels.push(`${h === 0 ? "12" : h} ${i < 12 ? "AM" : "PM"} `)
+            labels.push(`${h === 0 ? "12" : h} ${i < 12 ? "AM" : "PM"}`)
         }
 
         return labels

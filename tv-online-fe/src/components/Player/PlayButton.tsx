@@ -19,16 +19,22 @@ function PlayButton(props: Props) {
     const timerRef = React.useRef<NodeJS.Timer>()
 
     React.useEffect(() => {
-        if (!props.playerRef.current) return
-        setIsPlayed(!props.playerRef.current.paused)
+        listeners()
+    }, [props.playerRef.current])
 
-        props.playerRef.current.onplaying = handlePlay
-        props.playerRef.current.onloadeddata = () => setLoading(false)
-        props.playerRef.current.onsuspend = console.log
-        props.playerRef.current.onerror = console.log
+    function listeners() {
+        const { playerRef } = props
 
-        setIsMuted(props.playerRef.current.muted)
-    }, [])
+        if (!playerRef.current) return
+
+        setIsPlayed(!playerRef.current.paused)
+        setIsMuted(playerRef.current.muted)
+
+        playerRef.current.onplaying = handlePlay
+        playerRef.current.onloadeddata = () => setLoading(false)
+        playerRef.current.onsuspend = console.log
+        playerRef.current.onerror = console.log
+    }
 
     function handlePlay() {
         setIsPlayed(true)
@@ -43,6 +49,7 @@ function PlayButton(props: Props) {
         props.playerRef.current?.paused
             ? props.playerRef.current.play()
             : props.playerRef.current?.pause()
+
         setIsPlayed(!isPlayed)
     }
 
@@ -57,15 +64,19 @@ function PlayButton(props: Props) {
     }
 
     function toggleMute(e: React.MouseEvent<HTMLButtonElement>) {
-        if (!props.playerRef.current) return
         e.stopPropagation()
+
+        if (!props.playerRef.current) return
+
         props.playerRef.current.muted = !props.playerRef.current.muted
         setIsMuted(props.playerRef.current.muted)
     }
 
     function handleFullScreen(e: React.MouseEvent<HTMLButtonElement>) {
-        if (!props.playerRef.current) return
         e.stopPropagation()
+
+        if (!props.playerRef.current) return
+
         props.playerRef.current.requestFullscreen()
     }
 

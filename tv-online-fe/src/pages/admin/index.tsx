@@ -3,7 +3,13 @@ import { useNavigate } from "react-router-dom"
 import Fuse from "fuse.js"
 import Swal from "sweetalert2"
 
-import { ChannelCard, Modal, Layout, ImageUploader } from "@/components"
+import {
+    ChannelCard,
+    Modal,
+    Layout,
+    ImageUploader,
+    ChannelGridContainer,
+} from "@/components"
 import axios from "@/configs/axios"
 import { IChannel } from "@/types"
 import useSocket from "@/hooks/useSocket"
@@ -125,9 +131,9 @@ function BackofficeIndexPage() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
-                    <div className="flex items-center gap-x-6 rounded-lg bg-neutral-700 p-4 text-green-500">
-                        <UserSVG className="h-20" />
-                        <div className="flex items-center gap-x-3">
+                    <StatusCard>
+                        <UserSVG className="h-20  text-green-500" />
+                        <div className="flex items-center gap-x-3  text-green-500">
                             <div className="relative">
                                 <div className="absolute inset-0 h-4 w-4 animate-ping rounded-full bg-green-300" />
                                 <div className="h-4 w-4 rounded-full  bg-green-500" />
@@ -137,17 +143,18 @@ function BackofficeIndexPage() {
                                 {compactNumber(usersOnline.length)} users
                             </h4>
                         </div>
-                    </div>
-                    <div className="flex items-center gap-x-6 rounded-lg bg-neutral-700 p-4 text-orange-500">
-                        <TvSVG className="h-20" />
-                        <h4 className="font-medium">
+                    </StatusCard>
+
+                    <StatusCard>
+                        <TvSVG className="h-20 text-orange-500" />
+                        <h4 className="font-medium text-orange-500">
                             Total Channels: {compactNumber(channels.length)}{" "}
                             channels
                         </h4>
-                    </div>
+                    </StatusCard>
                 </div>
 
-                <div className="grid grid-cols-1 gap-12 pb-12 md:grid-cols-2 xl:grid-cols-3">
+                <ChannelGridContainer>
                     {getChannels.map((channel) => (
                         <ChannelCard
                             key={channel.id}
@@ -176,7 +183,7 @@ function BackofficeIndexPage() {
                             onClick={handleNavigate("/channel")}
                         />
                     ))}
-                </div>
+                </ChannelGridContainer>
             </div>
             <ModalEditChannel
                 open={openModal}
@@ -526,6 +533,18 @@ function ModalBaseChannel(props: ModalBaseChannelProps) {
                 <>{props.children}</>
             </div>
         </Modal>
+    )
+}
+
+interface StatusCardProps {
+    children: React.ReactNode
+}
+
+function StatusCard(props: StatusCardProps) {
+    return (
+        <div className="flex items-center gap-x-6 rounded-lg bg-neutral-700 p-4">
+            {props.children}
+        </div>
     )
 }
 

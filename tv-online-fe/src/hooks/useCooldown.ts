@@ -1,11 +1,11 @@
 import React from "react"
 
-function useCooldown(
-    onCooldownEnd?: () => void
-): [number, (value: number, ms: number) => void] {
+type ReturnUserCooldown = [number, (value: number, ms: number) => void]
+
+function useCooldown(onCooldownEnd?: () => void): ReturnUserCooldown {
     const [count, setCount] = React.useState<number>(0)
 
-    function setNewCount(value: number, ms: number = 10) {
+    function setNewCount(value: number, ms: number = 10): void {
         setCount(value)
         countDown(value, ms)
     }
