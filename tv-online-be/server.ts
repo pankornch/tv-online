@@ -15,7 +15,7 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "*",
     allowedHeaders: "*",
     methods: "*",
   })
@@ -32,7 +32,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*",
   },
 });
 

@@ -3,8 +3,8 @@ import { Channel } from "../models";
 import { Op } from "sequelize";
 
 export async function getListChannel(_req: Request, res: Response) {
-  const channels = await Channel.findAll({ raw: true });
-  res.json(channels);
+  const channels = await Channel.findAll();
+  res.json(channels.map((e) => e.toJSON()));
 }
 
 export async function getChannelById(req: Request, res: Response) {

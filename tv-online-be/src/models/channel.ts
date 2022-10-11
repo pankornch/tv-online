@@ -1,4 +1,5 @@
 import { DataTypes } from "sequelize";
+import { HOST_NAME } from "../utils/env";
 import sequelize from "../utils/db";
 
 const Channel = sequelize.define(
@@ -28,6 +29,13 @@ const Channel = sequelize.define(
     image: {
       type: DataTypes.STRING,
       allowNull: false,
+      get() {
+        const image: string = this.getDataValue("image");
+        if (image.startsWith("http")) return image;
+
+        const url = `${HOST_NAME}/api/v1/image/${image}`;
+        return url;
+      },
     },
     views: {
       type: DataTypes.INTEGER,
