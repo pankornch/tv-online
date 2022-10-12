@@ -135,6 +135,7 @@ class SocketController {
     const now = new Date();
 
     const uid = this.userSocketIdMap[socket.id];
+    if (!uid) return;
 
     const params: Partial<IChannelChat> = {
       channelID: data.channelID,

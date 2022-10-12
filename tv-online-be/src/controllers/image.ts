@@ -3,11 +3,6 @@ import path from "path";
 import fs from "fs";
 
 export function uploadImage(req: Request, res: Response) {
-  // const isProd = process.env.NODE_ENV === "production";
-  // const host = isProd
-  //   ? `${req.protocol}://${req.hostname}`
-  //   : "http://localhost:5500";
-  // const url = `${host}/api/v1/image/${req.file?.filename}`
   const url = req.file?.filename;
   res.json({ url });
 }

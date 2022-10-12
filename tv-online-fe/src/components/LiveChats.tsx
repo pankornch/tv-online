@@ -52,7 +52,7 @@ function LiveChats({ socket, chats, channelID, disabled }: LiveChatsProps) {
         <div className="relative overflow-hidden rounded-lg">
             <div
                 ref={chatContainerRef}
-                className="h-[32rem] overflow-y-auto overflow-x-hidden bg-neutral-700 px-6 py-4"
+                className="h-[32rem] overflow-y-auto overflow-x-hidden overscroll-contain bg-neutral-700 px-6 py-4"
             >
                 <div className="flex flex-col gap-y-4 pb-20">
                     {chats.map((chat) => (

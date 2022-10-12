@@ -3,16 +3,6 @@ import { IChannelLog, IChannelChat } from "@/types"
 import { Line } from "react-chartjs-2"
 import { useParams, Link } from "react-router-dom"
 import { Socket } from "socket.io-client"
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-} from "chart.js"
 
 import {
     getDate,
@@ -25,16 +15,6 @@ import {
 import axios from "@/configs/axios"
 import LiveChats from "../LiveChats"
 import ToggleMenu from "../ToggleMenu"
-
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-)
 
 interface AdminSideChannelProps {
     socket?: Socket
@@ -71,7 +51,6 @@ function AdminSideChannel({
                 params: { date },
             })
             setChats(res.data)
-            console.log(res.data)
         } catch (error) {
             console.log(error)
         }
