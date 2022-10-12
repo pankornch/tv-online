@@ -10,7 +10,7 @@
   }
 
   .input {
-    @apply bg-white rounded-md px-4 py-2 w-full outline-none focus:ring ring-orange-500 transition-all border border-orange-300 disabled:bg-gray-50;
+    @apply bg-white rounded-md px-4 py-2 w-full outline-none focus:ring ring-orange-500 transition-all border border-orange-300 disabled:bg-gray-50 disabled:cursor-not-allowed;
   }
 
   .button {

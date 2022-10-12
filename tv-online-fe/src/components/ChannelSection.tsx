@@ -14,7 +14,6 @@ interface Props {
 
 function ChannelSection({ channel, userWatching }: Props) {
     const playerRef = React.useRef<null | HTMLVideoElement>(null)
-
     return (
         <div className="aspect-video w-full">
             <Player

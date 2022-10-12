@@ -11,16 +11,19 @@ interface LiveChatsProps {
     socket?: Socket
     chats: IChannelChat[]
     channelID: string
+    disabled?: boolean
 }
-function LiveChats({ socket, chats, channelID }: LiveChatsProps) {
+function LiveChats({ socket, chats, channelID, disabled }: LiveChatsProps) {
     const [uid] = useUserID()
 
     const [isCooldown, setIsCooldown] = useState<boolean>(false)
-
     const [text, setText] = useState<string>("")
-
     const chatContainerRef = useRef<HTMLDivElement | null>(null)
     const progressArcRef = useRef<ProgressArcRef | null>(null)
+
+    useEffect(() => {
+        handleScrollToBottom()
+    }, [chats.length])
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
@@ -36,10 +39,6 @@ function LiveChats({ socket, chats, channelID }: LiveChatsProps) {
         progressArcRef.current?.startCount(3000)
         setIsCooldown(true)
     }
-
-    useEffect(() => {
-        handleScrollToBottom()
-    }, [chats.length])
 
     function handleScrollToBottom() {
         if (!chatContainerRef.current) return
@@ -72,6 +71,7 @@ function LiveChats({ socket, chats, channelID }: LiveChatsProps) {
                             value={text}
                             onChange={setStateInput(setText)}
                             autoFocus
+                            disabled={disabled}
                         />
 
                         <div className="absolute right-2 top-1/2 flex -translate-y-1/2 items-center gap-x-2">

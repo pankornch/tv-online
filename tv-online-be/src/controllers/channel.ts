@@ -9,7 +9,6 @@ export async function getListChannel(_req: Request, res: Response) {
 
 export async function getChannelById(req: Request, res: Response) {
   const channel = await Channel.findByPk(req.params.id);
-
   if (!channel) {
     res.status(404).json({ message: "channel not found" });
     return;

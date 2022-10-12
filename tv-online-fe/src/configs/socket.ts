@@ -1,3 +1,4 @@
+import { WS_URL } from "@/utils/env"
 import { io, SocketOptions, ManagerOptions } from "socket.io-client"
 
 function socket() {
@@ -11,7 +12,7 @@ function socket() {
         }
     }
 
-    const connect = io("ws://localhost:5500", option)
+    const connect = io(WS_URL, option)
 
     return connect
 }

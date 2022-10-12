@@ -64,15 +64,15 @@ function AdminUserByIdPage() {
                                             </td>
                                             <td className="px-6 py-4">
                                                 <img
-                                                    src={item.channel.image}
+                                                    src={item.channel?.image}
                                                     className="mx-auto aspect-video w-32 object-cover"
                                                 />
                                             </td>
                                             <td className="px-6 py-4">
-                                                {item.channel.name}
+                                                {item.channel?.name}
                                             </td>
                                             <td className="px-6 py-4">
-                                                {item.channel.title}
+                                                {item.channel?.title}
                                             </td>
                                             <td className="px-6 py-4">
                                                 {dateTimeFormat(item.createdAt)}

@@ -1,19 +1,21 @@
 import Navbar from "../Navbar"
 
 interface Props {
-	className?: string
-	children: React.ReactNode
-	navbar?: boolean
+    className?: string
+    children: React.ReactNode
+    navbar?: boolean
 }
 
 function Layout(props: Props) {
-	return (
-		<main className="bg-neutral-800 min-h-screen">
-			{(props.navbar ?? true) && <Navbar />}
+    return (
+        <main className="min-h-screen bg-neutral-800">
+            {(props.navbar ?? true) && <Navbar />}
 
-			<div className={props.className || "container"}>{props.children}</div>
-		</main>
-	)
+            <div className={props.className || "container"}>
+                {props.children}
+            </div>
+        </main>
+    )
 }
 
 export default Layout

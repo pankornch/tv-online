@@ -1,35 +1,9 @@
-import React from "react"
-import { Link, useNavigate, NavLink } from "react-router-dom"
-import { ReactComponent as LogoSVG } from "@/assets/logo.svg"
 import useUser from "@/hooks/useUser"
-import { ReactComponent as UserCircleSVG } from "@/assets/user-circle.svg"
 import { cls } from "@/utils"
-import ClickOutside from "./ClickOutside"
-
-function Navbar() {
-    const { status } = useUser()
-
-    return (
-        <header className="sticky top-0 z-50 mb-6 border-b border-neutral-600 bg-neutral-800 ">
-            <nav className="container flex items-center justify-between py-4">
-                <Link to="/">
-                    <div className="flex cursor-pointer items-center gap-3 text-white">
-                        <LogoSVG className="h-12 w-12" />
-                        <h3 className="hidden sm:block">TV ONLINE</h3>
-                    </div>
-                </Link>
-
-                <div className="text-white">
-                    {status === "AUTHENTICATED" ? (
-                        <AuthenticatedMenu />
-                    ) : (
-                        <UnauthenicatedMenu />
-                    )}
-                </div>
-            </nav>
-        </header>
-    )
-}
+import React from "react"
+import { useNavigate, NavLink } from "react-router-dom"
+import ClickOutside from "../ClickOutside"
+import { ReactComponent as UserCircleSVG } from "@/assets/user-circle.svg"
 
 function AuthenticatedMenu() {
     const navigate = useNavigate()
@@ -50,6 +24,7 @@ function AuthenticatedMenu() {
         logout()
         navigate("/")
     }
+
     return (
         <div className="flex items-center gap-x-3">
             <NavLink
@@ -89,12 +64,4 @@ function AuthenticatedMenu() {
     )
 }
 
-function UnauthenicatedMenu() {
-    return (
-        <Link to="/login">
-            <span className="underline-offset-4 hover:underline">Login</span>
-        </Link>
-    )
-}
-
-export default Navbar
+export default AuthenticatedMenu

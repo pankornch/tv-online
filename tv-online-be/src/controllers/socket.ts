@@ -32,7 +32,7 @@ class SocketController {
 
       socket
         .on("init", this.onInit.bind(this, socket))
-        .on("watching", this.onWachting.bind(this, socket))
+        .on("watching", this.onWatching.bind(this, socket))
         .on("get_users_channels", this.onGetUsersChannel.bind(this, socket))
         .on("leave_channel", this.onLeaveChannel.bind(this, socket))
         .on("get_users_online", this.onGetUsersOnline.bind(this, socket))
@@ -53,8 +53,11 @@ class SocketController {
     this.io.emit("users_online", [...userIDs]);
   }
 
-  async onWachting(socket: Socket, data: OnWatchingDTO) {
+  async onWatching(socket: Socket, data: OnWatchingDTO) {
     console.log("\n", ">>>>>>>>>> socket: watching", "\n");
+
+    const channel = await Channel.findByPk(data.channelID);
+    if (!channel) return;
 
     const uid = this.userSocketIdMap[socket.id];
 
@@ -125,6 +128,10 @@ class SocketController {
 
   async onSendChat(socket: Socket, data: OnSendChatDTO) {
     console.log("\n", ">>>>>>>>>> socket: send_chat", "\n");
+
+    const channel = await Channel.findByPk(data.channelID);
+    if (!channel) return;
+
     const now = new Date();
 
     const uid = this.userSocketIdMap[socket.id];

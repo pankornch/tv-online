@@ -1,7 +1,8 @@
+import { BASE_API_URL } from "@/utils/env"
 import Axios from "axios"
 
 const axios = Axios.create({
-    baseURL: "http://localhost:5500/api/v1",
+    baseURL: BASE_API_URL,
 })
 
 axios.interceptors.request.use((config) => {

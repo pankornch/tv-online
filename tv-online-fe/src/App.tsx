@@ -15,7 +15,7 @@ function App() {
 
     const navigate = useNavigate()
 
-    const socket = useSocket()
+    // const socket = useSocket()
 
     useEffect(() => {
         fetchChannels()
@@ -48,12 +48,11 @@ function App() {
         return result.map((e) => e.item)
     }, [channels, searchText])
 
-    useEffect(() => {
-        if (!socket) return
+    useSocket((socket) => {
         socket.emit("get_hot_channels").on("hot_channels", (data) => {
             setHotChannels(data)
         })
-    }, [socket])
+    })
 
     return (
         <Layout>
