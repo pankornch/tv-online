@@ -9,8 +9,8 @@ interface Props {
 function ClickOutside(props: Props) {
     const ref = React.useRef<HTMLDivElement | null>(null)
 
-    const handleClickOutside = React.useCallback((event: any) => {
-        if (ref.current && !ref.current.contains(event.target)) {
+    const handleClickOutside = React.useCallback((event: MouseEvent) => {
+        if (ref.current && !ref.current.contains(event.target as Node)) {
             props.onClickOutside?.call(null)
         }
     }, [])
