@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, ReactNode, FormEvent, useEffect } from "react"
 import Swal from "sweetalert2"
 
 import axios from "@/configs/axios"
@@ -14,8 +14,10 @@ interface ModalBaseChannelProps {
     open: boolean
     onClose: (status: boolean) => void
     title: string
-    children: React.ReactNode
+    children: ReactNode
 }
+
+type ImageMapper = Record<string, File>
 
 export function ModalBaseChannel(props: ModalBaseChannelProps) {
     return (
@@ -41,13 +43,9 @@ interface ModalAddChannelProps {
     ) => void
 }
 export function ModalAddChannel(props: ModalAddChannelProps) {
-    const [openModal, setOpenModal] = React.useState<boolean>(false)
-    const [currentChannel, setCurrentChannel] = React.useState<
-        Partial<IChannel>
-    >({})
-    const [imageMapper, setImageMapper] = React.useState<Record<string, File>>(
-        {}
-    )
+    const [openModal, setOpenModal] = useState<boolean>(false)
+    const [currentChannel, setCurrentChannel] = useState<Partial<IChannel>>({})
+    const [imageMapper, setImageMapper] = useState<ImageMapper>({})
 
     function handleOpenModal() {
         setOpenModal(true)
@@ -58,17 +56,25 @@ export function ModalAddChannel(props: ModalAddChannelProps) {
         setCurrentChannel({})
     }
 
-    function handleImageChange(url: string, file: File) {
-        const cloneChannel = cloneObj(currentChannel!)
+    function handleImageChange(
+        currentChannel: Partial<IChannel>,
+        imageMapper: ImageMapper,
+        url: string,
+        file: File
+    ) {
+        const cloneChannel = cloneObj<Partial<IChannel>>(currentChannel!)
         cloneChannel.image = url
         setCurrentChannel(cloneChannel)
         imageMapper["image"] = file
         setImageMapper(imageMapper)
     }
 
-    async function handleCreateChannel(e: React.FormEvent) {
+    async function handleCreateChannel(
+        currentChannel: Partial<IChannel>,
+        e: FormEvent
+    ) {
         e.preventDefault()
-        const body = Object.assign(currentChannel)
+        const body = cloneObj<Partial<IChannel>>(currentChannel)
 
         if (Object.values(imageMapper).length) {
             const res = await Promise.all(
@@ -110,14 +116,18 @@ export function ModalAddChannel(props: ModalAddChannelProps) {
                 onClose={handleCloseModal}
             >
                 <form
-                    onSubmit={handleCreateChannel}
+                    onSubmit={handleCreateChannel.bind(null, currentChannel)}
                     className="mt-6 flex flex-col gap-y-6"
                 >
                     <label>
                         <span>Cover Image</span>
                         <ImageUploader
                             value={currentChannel?.image}
-                            onChange={handleImageChange}
+                            onChange={handleImageChange.bind(
+                                null,
+                                currentChannel,
+                                imageMapper
+                            )}
                         />
                     </label>
                     <label>
@@ -185,20 +195,20 @@ interface ModalEditChannelProps {
 }
 
 export function ModalEditChannel(props: ModalEditChannelProps) {
-    const [currentChannel, setCurrentChannel] = React.useState<IChannel | null>(
-        null
-    )
-    const [imageMapper, setImageMapper] = React.useState<Record<string, File>>(
-        {}
-    )
+    const [currentChannel, setCurrentChannel] = useState<IChannel | null>(null)
+    const [imageMapper, setImageMapper] = useState<ImageMapper>({})
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (props.currentChannel) {
             setCurrentChannel(cloneObj(props.currentChannel))
         }
     }, [props.currentChannel])
 
-    async function handleUpdateChannel(e: React.FormEvent) {
+    async function handleUpdateChannel(
+        currentChannel: IChannel | null,
+        imageMapper: ImageMapper,
+        e: FormEvent
+    ) {
         e.preventDefault()
         if (!currentChannel) return
 
@@ -240,7 +250,7 @@ export function ModalEditChannel(props: ModalEditChannelProps) {
         }
     }
 
-    async function handleDeleteChannel() {
+    async function handleDeleteChannel(currentChannel: IChannel | null) {
         if (!currentChannel) return
         try {
             const willDelete = await Swal.fire({
@@ -277,7 +287,11 @@ export function ModalEditChannel(props: ModalEditChannelProps) {
             onClose={props.onClose}
         >
             <form
-                onSubmit={handleUpdateChannel}
+                onSubmit={handleUpdateChannel.bind(
+                    null,
+                    currentChannel,
+                    imageMapper
+                )}
                 className="mt-6 flex flex-col gap-y-6"
             >
                 <label>
@@ -349,7 +363,7 @@ export function ModalEditChannel(props: ModalEditChannelProps) {
                     <button
                         type="button"
                         className="button bg-red-500 text-white"
-                        onClick={handleDeleteChannel}
+                        onClick={handleDeleteChannel.bind(null, currentChannel)}
                     >
                         Delete
                     </button>

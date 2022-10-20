@@ -1,4 +1,10 @@
-import React from "react"
+import React, {
+    RefObject,
+    useEffect,
+    useRef,
+    useState,
+    MouseEvent,
+} from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ReactComponent as PlaySVG } from "@/assets/play.svg"
 import { ReactComponent as PauseSVG } from "@/assets/pause.svg"
@@ -8,17 +14,17 @@ import { ReactComponent as FullScreenSVG } from "@/assets/full-screen.svg"
 import { ReactComponent as LoadingSVG } from "@/assets/loading.svg"
 
 interface Props {
-    playerRef: React.MutableRefObject<HTMLVideoElement | null>
+    playerRef: RefObject<HTMLVideoElement | null>
 }
 
 function PlayButton(props: Props) {
-    const [isPlayed, setIsPlayed] = React.useState<boolean>(false)
-    const [isShow, setIsShow] = React.useState<boolean>(true)
-    const [isMuted, setIsMuted] = React.useState<boolean>(true)
-    const [loading, setLoading] = React.useState<boolean>(true)
-    const timerRef = React.useRef<NodeJS.Timer>()
+    const [isPlayed, setIsPlayed] = useState<boolean>(false)
+    const [isShow, setIsShow] = useState<boolean>(true)
+    const [isMuted, setIsMuted] = useState<boolean>(true)
+    const [loading, setLoading] = useState<boolean>(true)
+    const timerRef = useRef<NodeJS.Timer>()
 
-    React.useEffect(() => {
+    useEffect(() => {
         listeners()
     }, [props.playerRef.current])
 
@@ -43,7 +49,7 @@ function PlayButton(props: Props) {
         }, 2000)
     }
 
-    function togglePlay() {
+    function togglePlay(loading: boolean) {
         if (loading) return
 
         props.playerRef.current?.paused
@@ -63,7 +69,7 @@ function PlayButton(props: Props) {
         setIsShow(false)
     }
 
-    function toggleMute(e: React.MouseEvent<HTMLButtonElement>) {
+    function toggleMute(e: MouseEvent<HTMLButtonElement>) {
         e.stopPropagation()
 
         if (!props.playerRef.current) return
@@ -72,7 +78,7 @@ function PlayButton(props: Props) {
         setIsMuted(props.playerRef.current.muted)
     }
 
-    function handleFullScreen(e: React.MouseEvent<HTMLButtonElement>) {
+    function handleFullScreen(e: MouseEvent<HTMLButtonElement>) {
         e.stopPropagation()
 
         if (!props.playerRef.current) return
@@ -82,7 +88,7 @@ function PlayButton(props: Props) {
 
     return (
         <motion.div
-            onClick={togglePlay}
+            onClick={togglePlay.bind(null, loading)}
             className="absolute inset-0 flex h-full w-full items-center justify-center bg-black/25"
             onMouseOver={handleMouseOver}
             onMouseLeave={handleMouseLeave}

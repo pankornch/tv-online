@@ -1,8 +1,8 @@
-import React from "react"
+import React, { useContext } from "react"
 import { UserContext, UserContextProps } from "@/components/UserProvider"
 
 function useUser(): UserContextProps {
-    const context = React.useContext(UserContext)
+    const context = useContext(UserContext)
     return context
 }
 

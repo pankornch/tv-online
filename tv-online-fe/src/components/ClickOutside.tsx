@@ -1,21 +1,21 @@
-import React from "react"
+import React, { ReactNode, useCallback, useEffect, useRef } from "react"
 
 interface Props {
-    children: React.ReactNode
+    children: ReactNode
     onClickOutside?: () => void
     className?: string
 }
 
 function ClickOutside(props: Props) {
-    const ref = React.useRef<HTMLDivElement | null>(null)
+    const ref = useRef<HTMLDivElement | null>(null)
 
-    const handleClickOutside = React.useCallback((event: MouseEvent) => {
+    const handleClickOutside = useCallback((event: MouseEvent) => {
         if (ref.current && !ref.current.contains(event.target as Node)) {
             props.onClickOutside?.call(null)
         }
     }, [])
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (!ref.current) return
 
         document.addEventListener("mousedown", handleClickOutside)

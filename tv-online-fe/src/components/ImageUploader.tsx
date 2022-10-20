@@ -1,4 +1,4 @@
-import React from "react"
+import React, { ChangeEvent, useMemo } from "react"
 import { ReactComponent as PhotoSVG } from "@/assets/photo.svg"
 
 interface Props {
@@ -7,7 +7,7 @@ interface Props {
 }
 
 function ImageUploader(props: Props) {
-    const previewImage = React.useMemo<string>(() => {
+    const previewImage = useMemo<string>(() => {
         if (!props.value) return ""
 
         if (typeof props.value === "string") return props.value
@@ -16,7 +16,7 @@ function ImageUploader(props: Props) {
         return url
     }, [props.value])
 
-    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    function handleChange(e: ChangeEvent<HTMLInputElement>) {
         const { files } = e.target
 
         if (!files?.length) return

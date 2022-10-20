@@ -16,7 +16,7 @@ function AuthenticatedMenu() {
         setShowMenu(false)
     }
 
-    function handleToggleMenu() {
+    function handleToggleMenu(showMenu: boolean) {
         setShowMenu(!showMenu)
     }
 
@@ -41,7 +41,7 @@ function AuthenticatedMenu() {
             <div className="relative">
                 <button
                     className="flex items-center gap-x-1"
-                    onClick={handleToggleMenu}
+                    onClick={handleToggleMenu.bind(null, showMenu)}
                 >
                     <UserCircleSVG />
                     <p>{user?.username}</p>

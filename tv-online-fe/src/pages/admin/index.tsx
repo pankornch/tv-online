@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react"
+import React, { ChangeEvent, useEffect, useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Fuse from "fuse.js"
 
@@ -47,6 +47,7 @@ function BackofficeIndexPage() {
     }
 
     function handleSubmitChannel(
+        channels: IChannel[],
         channel: IChannel | null,
         type: "UPDATE" | "DELETE" | "CREATE"
     ) {
@@ -64,13 +65,13 @@ function BackofficeIndexPage() {
         setChannels(cloneChannels)
     }
 
-    const debounceSearch = React.useMemo(() => {
+    const debounceSearch = useMemo(() => {
         return debounce((e: ChangeEvent<HTMLInputElement>) =>
             setSeachText(e.target.value)
         )
     }, [])
 
-    const getChannels = React.useMemo(() => {
+    const getChannels = useMemo(() => {
         if (!searchText) return channels
 
         const fuse = new Fuse(channels, {
@@ -115,7 +116,9 @@ function BackofficeIndexPage() {
                         onChange={debounceSearch}
                     />
                     <div className="col-span-12 flex justify-start sm:col-span-4 md:col-span-3 md:justify-end">
-                        <ModalAddChannel onSubmit={handleSubmitChannel} />
+                        <ModalAddChannel
+                            onSubmit={handleSubmitChannel.bind(null, channels)}
+                        />
                     </div>
                 </div>
 
@@ -178,7 +181,7 @@ function BackofficeIndexPage() {
                 open={openModal}
                 currentChannel={currentChannel}
                 onClose={handleCloseModal}
-                onSubmit={handleSubmitChannel}
+                onSubmit={handleSubmitChannel.bind(null, channels)}
             />
         </Layout>
     )

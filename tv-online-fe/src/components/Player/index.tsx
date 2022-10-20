@@ -1,10 +1,10 @@
-import React from "react"
+import React, { RefObject } from "react"
 import HlsPlayerMemo from "./HlsPlayerMemo"
 import LiveCover from "./LiveCover"
 import PlayButton from "./PlayButton"
 
 interface Props {
-    playerRef: React.RefObject<HTMLVideoElement>
+    playerRef: RefObject<HTMLVideoElement>
     url: string
     userCount: number
 }

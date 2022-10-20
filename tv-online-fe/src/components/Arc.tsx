@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useRef } from "react"
 
 interface Props {
     deg: number
@@ -6,7 +6,7 @@ interface Props {
     color?: string
 }
 function Arc({ deg, radius, color }: Props) {
-    const arcRef = React.useRef<SVGPathElement | null>(null)
+    const arcRef = useRef<SVGPathElement | null>(null)
 
     function setArc(deg: number) {
         const _radius = radius / 2
@@ -14,7 +14,7 @@ function Arc({ deg, radius, color }: Props) {
         arcRef.current?.setAttribute("d", d)
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         setArc(deg)
     }, [deg])
 

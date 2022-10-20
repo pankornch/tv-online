@@ -1,5 +1,6 @@
+import { ReactNode } from "react"
 interface Props {
-    children: React.ReactNode
+    children: ReactNode
 }
 function ChannelGridContainer({ children }: Props) {
     return (

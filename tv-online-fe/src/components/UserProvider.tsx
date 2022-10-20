@@ -1,4 +1,4 @@
-import React from "react"
+import React, { createContext, ReactNode, useEffect, useState } from "react"
 import jwtDecode, { JwtPayload } from "jwt-decode"
 import { IUser } from "@/types"
 import axios from "@/configs/axios"
@@ -32,16 +32,15 @@ const defaultContextValue: UserContextProps = {
     },
 }
 
-export const UserContext =
-    React.createContext<UserContextProps>(defaultContextValue)
+export const UserContext = createContext<UserContextProps>(defaultContextValue)
 
 interface Props {
-    children: React.ReactNode
+    children: ReactNode
 }
 
 function UserProvider(props: Props) {
-    const [user, setUser] = React.useState<any | null>(null)
-    const [status, setStatus] = React.useState<UserStatus>(null)
+    const [user, setUser] = useState<any | null>(null)
+    const [status, setStatus] = useState<UserStatus>(null)
 
     function getUser(): void {
         const accessToken = localStorage.getItem("accessToken")
@@ -82,7 +81,7 @@ function UserProvider(props: Props) {
         }
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (!user) getUser()
     }, [])
 

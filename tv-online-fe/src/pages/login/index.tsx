@@ -14,7 +14,11 @@ function LoginPage() {
 
     const navigate = useNavigate()
 
-    async function handleSubmit(e: FormEvent) {
+    async function handleSubmit(
+        username: string,
+        password: string,
+        e: FormEvent
+    ) {
         e.preventDefault()
 
         try {
@@ -41,7 +45,10 @@ function LoginPage() {
                     <LogoSVG className="h-12 w-12" />
                     <h2>TV ONLINE</h2>
                 </div>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-y-6">
+                <form
+                    onSubmit={handleSubmit.bind(null, username, password)}
+                    className="flex flex-col gap-y-6"
+                >
                     <input
                         name="username"
                         value={username}

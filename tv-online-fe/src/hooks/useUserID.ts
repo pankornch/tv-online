@@ -1,12 +1,12 @@
 import { IUser } from "@/types"
 import jwtDecode, { JwtPayload } from "jwt-decode"
-import React from "react"
+import React, { useState } from "react"
 
 type ReturnUserID = [string, () => void]
 type JwtPayloadUser = JwtPayload & IUser
 
 function useUserID(): ReturnUserID {
-    const [uid, setUid] = React.useState<string>("")
+    const [uid, setUid] = useState<string>("")
 
     function genID(): string {
         return Date.now().toString(16)

@@ -1,11 +1,11 @@
-import React from "react"
+import React, { ReactNode } from "react"
 import { IChannel, IHotChannel } from "@/types"
 
 import { ReactComponent as FireSVG } from "@/assets/fire.svg"
 
 interface Props {
     channel: IChannel
-    action?: React.ReactNode
+    action?: ReactNode
     onClick?: (channel: IChannel) => void
     hotChannel?: IHotChannel
 }

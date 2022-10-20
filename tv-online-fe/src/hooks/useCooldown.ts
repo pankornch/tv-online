@@ -1,9 +1,9 @@
-import React from "react"
+import React, { useState } from "react"
 
 type ReturnUserCooldown = [number, (value: number, ms: number) => void]
 
 function useCooldown(onCooldownEnd?: () => void): ReturnUserCooldown {
-    const [count, setCount] = React.useState<number>(0)
+    const [count, setCount] = useState<number>(0)
 
     function setNewCount(value: number, ms: number = 10): void {
         setCount(value)

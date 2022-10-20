@@ -1,9 +1,9 @@
-import React from "react"
+import React, { ReactNode, useMemo } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 
 interface IMenuItem {
     key: string
-    children: React.ReactNode
+    children: ReactNode
 }
 
 interface Props {
@@ -17,7 +17,7 @@ function ToggleMenu({ menus, value }: Props) {
         exit: { opacity: 0 },
     }
 
-    const renderMenu = React.useMemo(() => {
+    const renderMenu = useMemo(() => {
         const menu = menus.find((menu) => menu.key === value)
         return menu?.children ?? null
     }, [menus, value])

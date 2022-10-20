@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import connect from "@/configs/socket"
 import { Socket } from "socket.io-client"
 
@@ -6,7 +6,7 @@ type SocketCb = (socket: Socket) => CleanUpFn | void
 type CleanUpFn = () => any
 
 function useSocket(cb?: SocketCb): Socket | undefined {
-    const [socket, setSocket] = React.useState<Socket>()
+    const [socket, setSocket] = useState<Socket>()
 
     React.useEffect(() => {
         const _socket = connect()

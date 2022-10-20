@@ -1,7 +1,7 @@
-import React from "react"
+import React, { memo } from "react"
 import ReactHlsPlayer from "react-hls-player"
 
-const HlsPlayerMemo = React.memo<{
+const HlsPlayerMemo = memo<{
     url: string
     playerRef: React.MutableRefObject<HTMLVideoElement | null>
 }>(function hlsPlayer(props) {

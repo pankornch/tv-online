@@ -22,30 +22,28 @@ function LiveChats({ socket, chats, channelID, disabled }: LiveChatsProps) {
     const progressArcRef = useRef<ProgressArcRef | null>(null)
 
     useEffect(() => {
-        handleScrollToBottom()
+        handleScrollToBottom(chatContainerRef.current)
     }, [chats.length])
 
-    function handleSubmit(e: React.FormEvent) {
+    function handleSubmit(text: string, e: React.FormEvent) {
         e.preventDefault()
 
         if (!text.trim()) return
 
-        handleSendComment()
+        handleSendComment(channelID, text)
         setText("")
     }
 
-    function handleSendComment() {
+    function handleSendComment(channelID: string, text: string) {
         socket?.emit("send_chat", { channelID, text })
         progressArcRef.current?.startCount(3000)
         setIsCooldown(true)
     }
 
-    function handleScrollToBottom() {
-        if (!chatContainerRef.current) return
+    function handleScrollToBottom(target: HTMLDivElement | null) {
+        if (!target) return
 
-        const el = chatContainerRef.current
-
-        el.scrollTo({ top: el.scrollHeight, behavior: "smooth" })
+        target.scrollTo({ top: target.scrollHeight, behavior: "smooth" })
     }
 
     return (
@@ -60,7 +58,10 @@ function LiveChats({ socket, chats, channelID, disabled }: LiveChatsProps) {
                     ))}
                 </div>
                 <div className="absolute bottom-0 left-0 w-full border-t border-neutral-500 bg-neutral-700 p-4">
-                    <form onSubmit={handleSubmit} className="relative">
+                    <form
+                        onSubmit={handleSubmit.bind(null, text)}
+                        className="relative"
+                    >
                         <img
                             src={getAvatarUrl(uid)}
                             className="avatar-rounded absolute left-2 top-1/2 h-8 -translate-y-1/2"
